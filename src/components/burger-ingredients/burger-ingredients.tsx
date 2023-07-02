@@ -2,7 +2,6 @@ import React from 'react';
 import {Tab} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
 import IngredientCard from '../ingredient-card/ingredient-card';
-import ModalOverlay from "../modal-overlay/modal-overlay";
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 
@@ -23,26 +22,31 @@ function BurgerIngredients(props: any) {
     const [currentCategory, setCurrentCategory] = React.useState(ingredientCategories[0].name);
     const [ingredientInModal, setIngredientInModal] = React.useState(null);
 
+    const setCategory = (name: any) => {
+        setCurrentCategory(name);
+        const element = document.getElementById(`header_${name}`);
+        if (element)
+            element.scrollIntoView({ behavior: "smooth" });
+    };
+
     return (
         <React.Fragment>
         {ingredientInModal !== null &&
-            <ModalOverlay onClick={() => setIngredientInModal(null)}>
-                <Modal onClose={() => setIngredientInModal(null)}>
-                    <IngredientDetails ingredient={ingredientInModal} />
-                </Modal>
-            </ModalOverlay>
+            <Modal onClose={() => setIngredientInModal(null)}>
+                <IngredientDetails ingredient={ingredientInModal} />
+            </Modal>
         }
 
         <div className={styles.mainWrapper}>
             <p className="text text_type_main-large pt-10 pb-5">Соберите бургер</p>
 
-            <div style={{ display: 'flex' }}>
+            <div className={styles.tabWrapper}>
                 {
                     burgerIngredients.map((category: any) => (
                         <Tab
                             value={category.name}
                             active={currentCategory === category.name}
-                            onClick={() => setCurrentCategory(category.name)}
+                            onClick={() => setCategory(category.name)}
                             key={category.name}
                         >
                             {category.header}
@@ -51,11 +55,11 @@ function BurgerIngredients(props: any) {
                 }
             </div>
 
-            <div style={{overflowY: "scroll"}}  className="custom-scroll">
+            <div className={`custom-scroll ${styles.catalogWrapper}`}>
                 {
                     burgerIngredients.map((category: any) => (
                         <div className="pt-10" key={category.name}>
-                            <p className="text text_type_main-medium">{category.header}</p>
+                            <p className="text text_type_main-medium" id={`header_${category.name}`}>{category.header}</p>
                             <div className={styles.ingredientCardGallery}>
                                 {
                                     category.ingredients.map((item: any) =>

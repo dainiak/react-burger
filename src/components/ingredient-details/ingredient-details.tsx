@@ -1,6 +1,5 @@
 import React from "react";
 import styles from './ingredient-details.module.css';
-import {CloseIcon, CurrencyIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 
 function IngredientDetails(props: any) {
     const ingredient = props.ingredient;
@@ -20,7 +19,7 @@ function IngredientDetails(props: any) {
             <div className={styles.wrapper}>
 
                 <img src={image} alt={name} className="pt-8" />
-                <p className="text text_type_main-medium pt-4 pb-8" style={{textAlign: "center"}}>{name}</p>
+                <p className="text text_type_main-medium pt-4 pb-8">{name}</p>
                 <div className={styles.nutritionFacts}>
                     {
                         nutritionFacts.map((fact: any) => (

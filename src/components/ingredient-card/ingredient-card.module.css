@@ -4,3 +4,8 @@
     align-items: center;
     width: 250px
 }
+
+.pricePart {
+    display: flex;
+    align-items: center;
+}

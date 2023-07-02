@@ -1,5 +1,5 @@
 import React from 'react';
-import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
+import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './ingredient-card.module.css';
 
 function IngredientCard(props: any) {
@@ -11,7 +11,7 @@ function IngredientCard(props: any) {
         <div className={styles.mainWrapper} onClick={props.onClick}>
             {/*<Counter count={1} size="default" extraClass="m-1" />*/}
             <img src={thumbnail} alt={text} />
-            <div style={{display: "flex", alignItems:"center"}} className="pt-1 pb-1">
+            <div className={`pt-1 pb-1 ${styles.pricePart}`}>
                 <p className="text text_type_digits-default pr-2">{price}</p>
                 <CurrencyIcon type="primary" />
             </div>
