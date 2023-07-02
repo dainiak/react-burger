@@ -1,0 +1,13 @@
+.ingredientCardGallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.mainWrapper {
+    width: 600px;
+    height: 850px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px
+}

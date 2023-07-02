@@ -1,0 +1,32 @@
+.header {
+    position: relative;
+    height: 80px;
+    width: 100vw;
+    vertical-align: middle;
+}
+
+.logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.nav {
+    height: 70px;
+    width: 100%;
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+}
+
+.navlink {
+    display: inline-flex;
+    align-items: center;
+}
+
+.flushRight {
+    margin-left: auto;
+}
