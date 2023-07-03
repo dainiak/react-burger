@@ -49,7 +49,7 @@ function App() {
             {isLoading && <p>Загружаем ингредиенты...</p>}
             {hasError && <p>Ошибка при загрузке ингредиентов. Попробуйте обновить страницу.</p>}
             {!isLoading && !hasError &&
-                <BurgerIngredients  burgerIngredients={burgerIngredientsData} />
+                <BurgerIngredients burgerIngredients={burgerIngredientsData} />
             }
             <BurgerConstructor />
 

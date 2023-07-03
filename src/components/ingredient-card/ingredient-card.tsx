@@ -1,6 +1,7 @@
 import React from 'react';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './ingredient-card.module.css';
+import PropTypes from 'prop-types';
 
 function IngredientCard(props: any) {
     const text = props.text;
@@ -19,6 +20,13 @@ function IngredientCard(props: any) {
             <p className="text text_type_main-small" style={{textAlign: "center"}}>{text}</p>
         </div>
     )
+}
+
+IngredientCard.propTypes = {
+    text: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    thumbnail: PropTypes.string.isRequired,
+    onClick: PropTypes.func.isRequired
 }
 
 export default IngredientCard;

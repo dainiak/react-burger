@@ -4,6 +4,8 @@ import styles from './burger-ingredients.module.css';
 import IngredientCard from '../ingredient-card/ingredient-card';
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
+import PropTypes from 'prop-types';
+import {ingredientPropTypes} from "../../utils/prop-types";
 
 function BurgerIngredients(props: any) {
     const ingredientCategories = [
@@ -81,6 +83,10 @@ function BurgerIngredients(props: any) {
 
         </React.Fragment>
     )
+}
+
+BurgerIngredients.propTypes = {
+    burgerIngredients: PropTypes.arrayOf(ingredientPropTypes).isRequired
 }
 
 export default BurgerIngredients;
