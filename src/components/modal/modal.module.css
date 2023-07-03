@@ -1,0 +1,20 @@
+.wrapper {
+    z-index: 200;
+    opacity: 1;
+    background-color: #1C1C21;
+    border-radius: 10px;
+    border-color: #4C4CFF33;
+    transform: translateX(-50%) translateY(-50%);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+}
+
+
+.closeIcon {
+    float: right;
+    margin-top: 40px;
+    margin-right: 60px;
+    margin-left: -60px;
+    width: 0;
+}
