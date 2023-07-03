@@ -18,12 +18,13 @@ function Modal(props: any) {
 
 
     return (
-        <ModalOverlay onClick={props.onClose}>
+        <React.Fragment>
+        <ModalOverlay onClick={props.onClose}></ModalOverlay>
             <div className={styles.wrapper} onClick={(event) => event.stopPropagation()}>
                 <div className={styles.closeIcon}><CloseIcon type="primary" onClick={props.onClose} /></div>
                 {props.children}
             </div>
-        </ModalOverlay>
+        </React.Fragment>
     )
 }
 
