@@ -17,7 +17,7 @@ function IngredientCard(props: any) {
                 <CurrencyIcon type="primary" />
             </div>
 
-            <p className="text text_type_main-small" style={{textAlign: "center"}}>{text}</p>
+            <p className={`text text_type_main-small ${styles.name}`}>{text}</p>
         </div>
     )
 }

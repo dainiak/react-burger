@@ -1,6 +1,8 @@
 import React from "react";
 import styles from './ingredient-details.module.css';
 
+import {ingredientPropTypes} from "../../utils/prop-types";
+
 function IngredientDetails(props: any) {
     const ingredient = props.ingredient;
     const name = ingredient.name;
@@ -33,6 +35,10 @@ function IngredientDetails(props: any) {
             </div>
         </React.Fragment>
     )
+}
+
+IngredientDetails.propTypes = {
+    ingredient: ingredientPropTypes
 }
 
 export default IngredientDetails;
