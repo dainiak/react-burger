@@ -9,6 +9,7 @@ export const SET_CURRENT_INGREDIENT = 'SET_CURRENT_INGREDIENT';
 
 export const ADD_INGREDIENT = 'ADD_INGREDIENT';
 export const REMOVE_INGREDIENT = 'REMOVE_INGREDIENT';
+export const REORDER_INGREDIENTS = 'REORDER_INGREDIENTS';
 
 export const POST_ORDER = 'POST_ORDER';
 export const POST_ORDER_SUCCESS = 'POST_ORDER_SUCCESS';
@@ -28,7 +29,7 @@ export const loadIngredients = () => {
                     type: LOAD_INGREDIENTS_SUCCESS,
                     payload: data.success ? data.data : []
                 }))
-                .catch(e => {
+                .catch(() => {
                     dispatch({ type: LOAD_INGREDIENTS_FAILED });
                 });
         }
@@ -50,7 +51,7 @@ export const postOrder = (ingredients: any) => {
                 type: POST_ORDER_SUCCESS,
                 payload: data.success ? {name: data.name, number: data.order.number} : {name: 'error', number: null}
             }))
-            .catch(e => {
+            .catch(() => {
                 dispatch({ type: POST_ORDER_FAILED });
             });
         }

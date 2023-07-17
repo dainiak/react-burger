@@ -1,17 +1,19 @@
-import React, {useReducer} from 'react';
+import React from 'react';
 import {Button, ConstructorElement, DragIcon, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-constructor.module.css';
 import OrderDetails from "../order-details/order-details";
 import Modal from "../modal/modal";
 import {useDrop} from "react-dnd";
-import {ADD_INGREDIENT, POST_ORDER, postOrder, REMOVE_INGREDIENT} from "../../services/actions";
+import {ADD_INGREDIENT, postOrder, REMOVE_INGREDIENT} from "../../services/actions";
 import {useDispatch, useSelector} from "react-redux";
-import IngredientCard from "../ingredient-card/ingredient-card";
+import BurgerConstructorDraggableElement
+    from "../burger-constructor-draggable-element/burger-constructor-druggable-element";
 
 function BurgerConstructor() {
     const [orderDetailsVisible, setOrderDetailsVisible] = React.useState(false);
     const dispatch = useDispatch();
     const ingredients = useSelector((store: any) => store.burgerConstructor.items);
+    const orderNumber = useSelector((store: any) => store.order.number);
     const bun = useSelector((store: any) => store.burgerConstructor.bun);
     // @ts-ignore
     const totalPrice = ingredients.reduce((partialSum, ingredient) => partialSum + ingredient.price, 0)
@@ -33,6 +35,7 @@ function BurgerConstructor() {
         })
     });
 
+
     return (
         <React.Fragment>
             {orderDetailsVisible &&
@@ -52,20 +55,18 @@ function BurgerConstructor() {
                     /></div>}
 
                     <div className={`custom-scroll ${styles.scrollablePart}`}>
-                        {!bun && <p className={`${styles.emptyConstructor}`}>Сначала выберите булку. Перетащите её из списка ингредиентов.</p>}
+                        {!bun && <p className={`${styles.emptyConstructor}`}>Сначала выберите булку. Перетащите её сюда из списка ингредиентов.</p>}
                         {
                             ingredients.map((item: any, index: any) =>
                                 (
-                                    <div className={styles.constructorElementWrapper} key={item._id + index}>
-                                        <ConstructorElement
-                                            key={item._id}
-                                            text={item.name}
-                                            price={item.price}
-                                            thumbnail={item.image}
-                                            handleClose={() => dispatch({type: REMOVE_INGREDIENT, payload: item._id})}
-                                        />
-                                        <DragIcon type="primary" />
-                                    </div>
+                                    <BurgerConstructorDraggableElement
+                                        key={item._id + index.toString()}
+                                        index={index}
+                                        text={item.name}
+                                        price={item.price}
+                                        thumbnail={item.image}
+                                        handleClose={() => dispatch({type: REMOVE_INGREDIENT, payload: {id: item._id, index: index}})}
+                                    />
                                 )
                             )
                         }
@@ -83,9 +84,11 @@ function BurgerConstructor() {
                     <p className="text text_type_digits-medium">{totalPrice}</p>
                     <CurrencyIcon type="primary" />
                     <div className="pr-5"></div>
-                    <Button htmlType="submit" type="primary" size="large" onClick={() => submitOrder()}>
+                    {orderNumber === null && bun &&
+                        <Button htmlType="submit" type="primary" size="large" onClick={() => submitOrder()}>
                         Оформить заказ
-                    </Button>
+                        </Button>
+                    }
                 </div>
             </div>
         </React.Fragment>

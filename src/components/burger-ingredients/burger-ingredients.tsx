@@ -5,7 +5,8 @@ import IngredientCard from '../ingredient-card/ingredient-card';
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import {useSelector, useDispatch} from "react-redux";
-import {SET_CURRENT_INGREDIENT} from "../../services/actions";
+import {REMOVE_INGREDIENT, SET_CURRENT_INGREDIENT} from "../../services/actions";
+import {useDrop} from "react-dnd";
 
 function BurgerIngredients() {
     const ingredientCategories = [
@@ -59,6 +60,14 @@ function BurgerIngredients() {
         setCurrentCategory(relevantCategoryName);
     }
 
+    const [, dropTarget] = useDrop({
+        accept: 'ingredientInConstructor',
+        drop(item) {
+            // @ts-ignore
+            dispatch({type: REMOVE_INGREDIENT, payload: {index: item.index}});
+        }
+    });
+
     return (
         <React.Fragment>
         {currentIngredient !== null &&
@@ -67,7 +76,7 @@ function BurgerIngredients() {
             </Modal>
         }
 
-        <div className={styles.mainWrapper}>
+        <div className={styles.mainWrapper} ref={dropTarget}>
             <p className="text text_type_main-large pt-10 pb-5">Соберите бургер</p>
 
             <div className={styles.tabWrapper}>
