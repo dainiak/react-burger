@@ -2,16 +2,26 @@ import React from 'react';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './ingredient-card.module.css';
 import PropTypes from 'prop-types';
+import {useDrag} from "react-dnd";
+import {ingredientPropTypes} from "../../utils/prop-types";
 
 function IngredientCard(props: any) {
-    const text = props.text;
-    const price = props.price;
-    const thumbnail = props.thumbnail;
+    const text = props.ingredientItem.text;
+    const price = props.ingredientItem.price;
+    const thumbnail = props.ingredientItem.image;
+
+    const [{isDrag}, dragRef] = useDrag({
+        type: 'ingredient',
+        item: props.ingredientItem,
+        collect: monitor => ({
+            isDrag: monitor.isDragging()
+        })
+    });
 
     return (
         <div className={styles.mainWrapper} onClick={props.onClick}>
             {/*<Counter count={1} size="default" extraClass="m-1" />*/}
-            <img src={thumbnail} alt={text} />
+            <img src={thumbnail} alt={text}  ref={dragRef} />
             <div className={`pt-1 pb-1 ${styles.pricePart}`}>
                 <p className="text text_type_digits-default pr-2">{price}</p>
                 <CurrencyIcon type="primary" />
@@ -23,9 +33,7 @@ function IngredientCard(props: any) {
 }
 
 IngredientCard.propTypes = {
-    text: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
-    thumbnail: PropTypes.string.isRequired,
+    ingredientItem: ingredientPropTypes,
     onClick: PropTypes.func.isRequired
 }
 

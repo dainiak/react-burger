@@ -210,3 +210,11 @@ export const MockData = [
        "__v":0
     }
  ];
+
+export const MockOrder = {
+   "name": "Краторный метеоритный бургер",
+    "order": {
+      "number": 6257
+   },
+      "success": true
+};

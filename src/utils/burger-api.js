@@ -14,9 +14,9 @@ function getIngredientsByApi() {
 
 function postOrderByApi(ingredients) {
     return fetch(
-        `${NORMA_API_ENDPOINT}/ingredients`, {
+        `${NORMA_API_ENDPOINT}/orders`, {
             method: 'POST',
-            body: {
+            body:  {
                 ingredients: ingredients
             }
         }

@@ -95,9 +95,7 @@ function BurgerIngredients() {
                                     category.ingredients.map((item: any) =>
                                         <IngredientCard
                                             key={item._id}
-                                            text={item.name}
-                                            price={item.price}
-                                            thumbnail={item.image}
+                                            ingredientItem={item}
                                             onClick={() => setCurrentIngredient(item)}
                                         />
                                     )
