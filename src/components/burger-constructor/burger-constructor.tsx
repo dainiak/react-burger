@@ -4,7 +4,8 @@ import styles from './burger-constructor.module.css';
 import OrderDetails from "../order-details/order-details";
 import Modal from "../modal/modal";
 import {useDrop} from "react-dnd";
-import {ADD_INGREDIENT, postOrder, REMOVE_INGREDIENT} from "../../services/actions";
+import {ADD_INGREDIENT, REMOVE_INGREDIENT} from "../../services/actions/burger-constructor";
+import {postOrder} from "../../services/actions/order";
 import {useDispatch, useSelector} from "react-redux";
 import BurgerConstructorDraggableElement
     from "../burger-constructor-draggable-element/burger-constructor-druggable-element";
@@ -60,7 +61,7 @@ function BurgerConstructor() {
                             ingredients.map((item: any, index: any) =>
                                 (
                                     <BurgerConstructorDraggableElement
-                                        key={item._id + index.toString()}
+                                        key={item.uuid}
                                         index={index}
                                         text={item.name}
                                         price={item.price}

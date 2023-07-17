@@ -4,10 +4,12 @@ import styles from './burger-ingredients.module.css';
 import IngredientCard from '../ingredient-card/ingredient-card';
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
-import {useSelector, useDispatch} from "react-redux";
-import {REMOVE_INGREDIENT, SET_CURRENT_INGREDIENT} from "../../services/actions";
+import {useSelector, useDispatch, shallowEqual} from "react-redux";
+import {SET_CURRENT_INGREDIENT} from "../../services/actions/burger-ingredients";
+import {REMOVE_INGREDIENT} from "../../services/actions/burger-constructor";
 import {useDrop} from "react-dnd";
 
+// @ts-ignore
 function BurgerIngredients() {
     const ingredientCategories = [
         {name: "bun", header: "Булки", headerRef: React.createRef()},
@@ -15,11 +17,28 @@ function BurgerIngredients() {
         {name: "main", header: "Начинки", headerRef: React.createRef()}
     ];
 
-    let burgerIngredients = useSelector(
+    const burgerIngredients = useSelector(
         (store: any) => store.burgerIngredients.items
     );
 
-    burgerIngredients = ingredientCategories.map((category: any) => {
+    // @ts-ignore
+    const countIngredients = (store: any) => {
+        let counts = {};
+        if(store.burgerConstructor.bun) {
+            // @ts-ignore
+            counts[store.burgerConstructor.bun._id] = 2;
+        }
+        for(let ingredient of store.burgerConstructor.items) {
+            // @ts-ignore
+            counts[ingredient._id] = (counts[ingredient._id] || 0) + 1;
+        }
+        return counts;
+    };
+
+    // @ts-ignore
+    const counts = useSelector(countIngredients, shallowEqual);
+
+    const burgerIngredientsPerCategory = ingredientCategories.map((category: any) => {
         return {
             ...category,
             ingredients: burgerIngredients.filter((ingredient: any) => ingredient.type === category.name)
@@ -68,6 +87,8 @@ function BurgerIngredients() {
         }
     });
 
+    // @ts-ignore
+    // @ts-ignore
     return (
         <React.Fragment>
         {currentIngredient !== null &&
@@ -81,7 +102,7 @@ function BurgerIngredients() {
 
             <div className={styles.tabWrapper}>
                 {
-                    burgerIngredients.map((category: any) => (
+                    burgerIngredientsPerCategory.map((category: any) => (
                         <Tab
                             value={category.name}
                             active={currentCategory === category.name}
@@ -96,7 +117,7 @@ function BurgerIngredients() {
 
             <div className={`custom-scroll ${styles.catalogWrapper}`} onScroll={updateActiveTab}>
                 {
-                    burgerIngredients.map((category: any) => (
+                    burgerIngredientsPerCategory.map((category: any) => (
                         <div className="pt-10" key={category.name}>
                             <p className="text text_type_main-medium" id={`header_${category.name}`} ref={category.headerRef}>{category.header}</p>
                             <div className={styles.ingredientCardGallery}>
@@ -105,6 +126,11 @@ function BurgerIngredients() {
                                         <IngredientCard
                                             key={item._id}
                                             ingredientItem={item}
+
+                                            count={
+                                                // @ts-ignore
+                                                counts[item._id] || 0
+                                            }
                                             onClick={() => setCurrentIngredient(item)}
                                         />
                                     )

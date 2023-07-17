@@ -3,7 +3,7 @@ import {ConstructorElement, DragIcon} from "@ya.praktikum/react-developer-burger
 import React from "react";
 import {useDrag, useDrop} from "react-dnd";
 import PropTypes from "prop-types";
-import {REORDER_INGREDIENTS} from "../../services/actions";
+import {REORDER_INGREDIENTS} from "../../services/actions/burger-constructor";
 import {useDispatch} from "react-redux";
 
 

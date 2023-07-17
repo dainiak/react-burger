@@ -9,7 +9,7 @@ import BurgerConstructor from './components/burger-constructor/burger-constructo
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { useDispatch, useSelector } from "react-redux";
-import { loadIngredients } from "./services/actions";
+import { loadIngredients } from "./services/actions/burger-ingredients";
 
 function App() {
     const dispatch = useDispatch();
