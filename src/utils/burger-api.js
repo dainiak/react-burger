@@ -1,15 +1,28 @@
 const NORMA_API_ENDPOINT = 'https://norma.nomoreparties.space/api'
 
-const checkReponse = (res) => {
+const checkApiReponse = (res) => {
     return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
 };
 
-function getIngredients() {
+function getIngredientsByApi() {
     return fetch(
         `${NORMA_API_ENDPOINT}/ingredients`
     ).then(
-        checkReponse
+        checkApiReponse
     );
 }
 
-export {getIngredients, checkReponse};
+function postOrderByApi(ingredients) {
+    return fetch(
+        `${NORMA_API_ENDPOINT}/ingredients`, {
+            method: 'POST',
+            body: {
+                ingredients: ingredients
+            }
+        }
+    ).then(
+        checkApiReponse
+    );
+}
+
+export {getIngredientsByApi, checkApiReponse, postOrderByApi };

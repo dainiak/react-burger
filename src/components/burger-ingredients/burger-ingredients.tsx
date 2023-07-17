@@ -1,28 +1,38 @@
-import React from 'react';
+import React, {SyntheticEvent} from 'react';
 import {Tab} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
 import IngredientCard from '../ingredient-card/ingredient-card';
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
-import PropTypes from 'prop-types';
-import {ingredientPropTypes} from "../../utils/prop-types";
+import {useSelector, useDispatch} from "react-redux";
+import {SET_CURRENT_INGREDIENT} from "../../services/actions";
 
-function BurgerIngredients(props: any) {
+function BurgerIngredients() {
     const ingredientCategories = [
-        {name: "bun", header: "Булки"},
-        {name: "sauce", header: "Соусы"},
-        {name: "main", header: "Начинки"}
+        {name: "bun", header: "Булки", headerRef: React.createRef()},
+        {name: "sauce", header: "Соусы", headerRef: React.createRef()},
+        {name: "main", header: "Начинки", headerRef: React.createRef()}
     ];
 
-    let burgerIngredients = ingredientCategories.map((category: any) => {
+    let burgerIngredients = useSelector(
+        (store: any) => store.burgerIngredients.items
+    );
+
+    burgerIngredients = ingredientCategories.map((category: any) => {
         return {
             ...category,
-            ingredients: props.burgerIngredients.filter((ingredient: any) => ingredient.type === category.name)
+            ingredients: burgerIngredients.filter((ingredient: any) => ingredient.type === category.name)
         };
     });
 
     const [currentCategory, setCurrentCategory] = React.useState(ingredientCategories[0].name);
-    const [ingredientInModal, setIngredientInModal] = React.useState(null);
+
+    const dispatch = useDispatch();
+    const setCurrentIngredient = (ingredient: any) => {
+        dispatch({type: SET_CURRENT_INGREDIENT, payload: ingredient})
+    };
+
+    const currentIngredient = useSelector((store: any) => store.currentIngredient);
 
     const setCategory = (name: any) => {
         setCurrentCategory(name);
@@ -31,11 +41,29 @@ function BurgerIngredients(props: any) {
             element.scrollIntoView({ behavior: "smooth" });
     };
 
+    const updateActiveTab = (e: SyntheticEvent) => {
+        let relevantCategoryName = null;
+        let bestDistance = Infinity;
+        for (let category of ingredientCategories) {
+
+            const distance = Math.abs(
+                // @ts-ignore
+                category.headerRef.current.getBoundingClientRect().top - e.currentTarget.getBoundingClientRect().top
+            );
+            if (distance < bestDistance ) {
+                relevantCategoryName = category.name;
+                bestDistance = distance;
+            }
+        }
+        // @ts-ignore
+        setCurrentCategory(relevantCategoryName);
+    }
+
     return (
         <React.Fragment>
-        {ingredientInModal !== null &&
-            <Modal onClose={() => setIngredientInModal(null)}>
-                <IngredientDetails ingredient={ingredientInModal} />
+        {currentIngredient !== null &&
+            <Modal onClose={() => setCurrentIngredient(null)}>
+                <IngredientDetails ingredient={currentIngredient} />
             </Modal>
         }
 
@@ -57,11 +85,11 @@ function BurgerIngredients(props: any) {
                 }
             </div>
 
-            <div className={`custom-scroll ${styles.catalogWrapper}`}>
+            <div className={`custom-scroll ${styles.catalogWrapper}`} onScroll={updateActiveTab}>
                 {
                     burgerIngredients.map((category: any) => (
                         <div className="pt-10" key={category.name}>
-                            <p className="text text_type_main-medium" id={`header_${category.name}`}>{category.header}</p>
+                            <p className="text text_type_main-medium" id={`header_${category.name}`} ref={category.headerRef}>{category.header}</p>
                             <div className={styles.ingredientCardGallery}>
                                 {
                                     category.ingredients.map((item: any) =>
@@ -70,7 +98,7 @@ function BurgerIngredients(props: any) {
                                             text={item.name}
                                             price={item.price}
                                             thumbnail={item.image}
-                                            onClick={() => setIngredientInModal(item)}
+                                            onClick={() => setCurrentIngredient(item)}
                                         />
                                     )
                                 }
@@ -83,10 +111,6 @@ function BurgerIngredients(props: any) {
 
         </React.Fragment>
     )
-}
-
-BurgerIngredients.propTypes = {
-    burgerIngredients: PropTypes.arrayOf(ingredientPropTypes).isRequired
 }
 
 export default BurgerIngredients;
