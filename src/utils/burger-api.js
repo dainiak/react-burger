@@ -16,9 +16,10 @@ function postOrderByApi(ingredients) {
     return fetch(
         `${NORMA_API_ENDPOINT}/orders`, {
             method: 'POST',
-            body:  {
-                ingredients: ingredients
-            }
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body:  JSON.stringify({ingredients: ingredients})
         }
     ).then(
         checkApiReponse
