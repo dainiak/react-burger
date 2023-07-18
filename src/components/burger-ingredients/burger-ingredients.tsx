@@ -8,6 +8,8 @@ import {useSelector, useDispatch, shallowEqual} from "react-redux";
 import {SET_CURRENT_INGREDIENT} from "../../services/actions/burger-ingredients";
 import {REMOVE_INGREDIENT} from "../../services/actions/burger-constructor";
 import {useDrop} from "react-dnd";
+import {selectBurgerIngredientsItems, selectCurrentIngredient} from "../../services/selectors/burger-ingredients";
+import {selectIngredientsCounts} from "../../services/selectors/burger-constructor";
 
 // @ts-ignore
 function BurgerIngredients() {
@@ -17,26 +19,8 @@ function BurgerIngredients() {
         {name: "main", header: "Начинки", headerRef: React.createRef()}
     ];
 
-    const burgerIngredients = useSelector(
-        (store: any) => store.burgerIngredients.items
-    );
-
-    // @ts-ignore
-    const countIngredients = (store: any) => {
-        let counts = {};
-        if(store.burgerConstructor.bun) {
-            // @ts-ignore
-            counts[store.burgerConstructor.bun._id] = 2;
-        }
-        for(let ingredient of store.burgerConstructor.items) {
-            // @ts-ignore
-            counts[ingredient._id] = (counts[ingredient._id] || 0) + 1;
-        }
-        return counts;
-    };
-
-    // @ts-ignore
-    const counts = useSelector(countIngredients, shallowEqual);
+    const burgerIngredients = useSelector(selectBurgerIngredientsItems, shallowEqual);
+    const counts = useSelector(selectIngredientsCounts, shallowEqual);
 
     const burgerIngredientsPerCategory = ingredientCategories.map((category: any) => {
         return {
@@ -52,7 +36,7 @@ function BurgerIngredients() {
         dispatch({type: SET_CURRENT_INGREDIENT, payload: ingredient})
     };
 
-    const currentIngredient = useSelector((store: any) => store.currentIngredient);
+    const currentIngredient = useSelector(selectCurrentIngredient);
 
     const setCategory = (name: any) => {
         setCurrentCategory(name);

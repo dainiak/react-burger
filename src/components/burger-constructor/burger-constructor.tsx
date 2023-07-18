@@ -9,13 +9,15 @@ import {postOrder} from "../../services/actions/order";
 import {useDispatch, useSelector} from "react-redux";
 import BurgerConstructorDraggableElement
     from "../burger-constructor-draggable-element/burger-constructor-druggable-element";
+import {selectBurgerConstructorBun, selectBurgerConstructorItems} from "../../services/selectors/burger-constructor";
+import {selectOrderNumber} from "../../services/selectors/order";
 
 function BurgerConstructor() {
     const [orderDetailsVisible, setOrderDetailsVisible] = React.useState(false);
     const dispatch = useDispatch();
-    const ingredients = useSelector((store: any) => store.burgerConstructor.items);
-    const orderNumber = useSelector((store: any) => store.order.number);
-    const bun = useSelector((store: any) => store.burgerConstructor.bun);
+    const ingredients = useSelector(selectBurgerConstructorItems);
+    const orderNumber = useSelector(selectOrderNumber);
+    const bun = useSelector(selectBurgerConstructorBun);
     // @ts-ignore
     const totalPrice = ingredients.reduce((partialSum, ingredient) => partialSum + ingredient.price, 0)
         + (bun ? bun.price * 2 : 0);
