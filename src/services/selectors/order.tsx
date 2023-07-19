@@ -1,0 +1,1 @@
+export const selectOrderNumber = (store: any) => store.order.number;

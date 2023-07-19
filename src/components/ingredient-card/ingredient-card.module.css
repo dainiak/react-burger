@@ -2,7 +2,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 250px
+    width: 250px;
+    overflow: hidden;
 }
 
 .pricePart {
@@ -12,4 +13,15 @@
 
 .name {
     text-align: center;
+}
+
+.counter {
+    top: 0;
+    right: 0;
+    transform: translateX(50px) translateY(40px);
+    position: relative!important;
+}
+
+.hidden {
+    opacity: 0;
 }

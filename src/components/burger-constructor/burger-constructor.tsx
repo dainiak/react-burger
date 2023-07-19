@@ -1,11 +1,43 @@
 import React from 'react';
-import {Button, ConstructorElement, DragIcon, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
+import {Button, ConstructorElement, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-constructor.module.css';
 import OrderDetails from "../order-details/order-details";
 import Modal from "../modal/modal";
+import {useDrop} from "react-dnd";
+import {ADD_INGREDIENT, REMOVE_INGREDIENT} from "../../services/actions/burger-constructor";
+import {postOrder} from "../../services/actions/order";
+import {useDispatch, useSelector} from "react-redux";
+import BurgerConstructorDraggableElement
+    from "../burger-constructor-draggable-element/burger-constructor-druggable-element";
+import {selectBurgerConstructorBun, selectBurgerConstructorItems} from "../../services/selectors/burger-constructor";
+import {selectOrderNumber} from "../../services/selectors/order";
 
 function BurgerConstructor() {
     const [orderDetailsVisible, setOrderDetailsVisible] = React.useState(false);
+    const dispatch = useDispatch();
+    const ingredients = useSelector(selectBurgerConstructorItems);
+    const orderNumber = useSelector(selectOrderNumber);
+    const bun = useSelector(selectBurgerConstructorBun);
+    // @ts-ignore
+    const totalPrice = ingredients.reduce((partialSum, ingredient) => partialSum + ingredient.price, 0)
+        + (bun ? bun.price * 2 : 0);
+
+    const submitOrder = () => {
+        setOrderDetailsVisible(true);
+        // @ts-ignore
+        dispatch(postOrder([bun, ...ingredients.map(item => item._id), bun]));
+    }
+
+    const [{isHover}, dropTarget] = useDrop({
+        accept: 'ingredient',
+        drop(item) {
+            dispatch({type: ADD_INGREDIENT, payload: item});
+        },
+        collect: monitor => ({
+            isHover: monitor.isOver(),
+        })
+    });
+
 
     return (
         <React.Fragment>
@@ -15,48 +47,51 @@ function BurgerConstructor() {
                 </Modal>
             }
             <div className={`pt-25 ${styles.mainWrapper}`}>
-                <div className={styles.constructorElementWrapper}>
-                    <ConstructorElement
-                    type="top"
-                    isLocked={true}
-                    text="Краторная булка N-200i (верх)"
-                    price={200}
-                    thumbnail={"https://code.s3.yandex.net/react/code/bun-02.png"}
-                /></div>
+                <div ref={dropTarget} className={`${isHover && styles.constructorDropNudge}`}>
+                    {bun && <div className={`${styles.constructorElementWrapper} ${styles.constructorUpperBun}`} >
+                        <ConstructorElement
+                        type="top"
+                        isLocked={true}
+                        text={bun.name + ' (верх)'}
+                        price={bun.price}
+                        thumbnail={bun.image}
+                    /></div>}
 
-                <div className={`custom-scroll ${styles.scrollablePart}`}>
-                    <div  className={styles.constructorElementWrapper}>
-                        <ConstructorElement
-                            text="Краторная булка N-200i (верх)"
-                            price={50}
-                            thumbnail={"https://code.s3.yandex.net/react/code/bun-02.png"}
-                        />
-                        <DragIcon type="primary" />
+                    <div className={`custom-scroll ${styles.scrollablePart}`}>
+                        {!bun && <p className={`${styles.emptyConstructor}`}>Сначала выберите булку. Перетащите её сюда из списка ингредиентов.</p>}
+                        {
+                            ingredients.map((item: any, index: any) =>
+                                (
+                                    <BurgerConstructorDraggableElement
+                                        key={item.uuid}
+                                        index={index}
+                                        text={item.name}
+                                        price={item.price}
+                                        thumbnail={item.image}
+                                        handleClose={() => dispatch({type: REMOVE_INGREDIENT, payload: {id: item._id, index: index}})}
+                                    />
+                                )
+                            )
+                        }
                     </div>
-                    <div  className={styles.constructorElementWrapper}>
-                        <ConstructorElement
-                            text="Краторная булка N-200i (верх)"
-                            price={50}
-                            thumbnail={"https://code.s3.yandex.net/react/code/bun-02.png"}
-                        />
-                        <DragIcon type="primary" />
-                    </div>
+                    {bun && <div  className={`${styles.constructorElementWrapper} ${styles.constructorLowerBun}`}><ConstructorElement
+                        type="bottom"
+                        isLocked={true}
+                        text={bun.name + ' (низ)'}
+                        price={bun.price}
+                        thumbnail={bun.image}
+                    /></div>}
                 </div>
-                <div  className={styles.constructorElementWrapper}><ConstructorElement
-                    type="bottom"
-                    isLocked={true}
-                    text="Краторная булка N-200i (низ)"
-                    price={200}
-                    thumbnail={"https://code.s3.yandex.net/react/code/bun-02.png"}
-                /></div>
 
                 <div className={`pt-10 ${styles.footerWrapper}`}>
-                    <p className="text text_type_digits-medium">610</p>
+                    <p className="text text_type_digits-medium">{totalPrice}</p>
                     <CurrencyIcon type="primary" />
                     <div className="pr-5"></div>
-                    <Button htmlType="submit" type="primary" size="large" onClick={() => setOrderDetailsVisible(true)}>
+                    {orderNumber === null && bun &&
+                        <Button htmlType="submit" type="primary" size="large" onClick={() => submitOrder()}>
                         Оформить заказ
-                    </Button>
+                        </Button>
+                    }
                 </div>
             </div>
         </React.Fragment>
