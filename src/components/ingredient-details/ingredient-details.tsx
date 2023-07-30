@@ -2,9 +2,17 @@ import React from "react";
 import styles from './ingredient-details.module.css';
 
 import {ingredientPropTypes} from "../../utils/prop-types";
+import {useSelector} from "react-redux";
+import {selectBurgerIngredientsItems} from "../../services/selectors/burger-ingredients";
+import PropTypes from "prop-types";
 
 function IngredientDetails(props: any) {
-    const ingredient = props.ingredient;
+    const ingredients = useSelector(selectBurgerIngredientsItems);
+    const ingredient = ingredients.find((ingredient: any) => ingredient._id === props.ingredientId);
+    if(!ingredient) {
+        return (<div className={styles.wrapper}><p>Ингредиент не найден</p></div>);
+    }
+
     const name = ingredient.name;
     const image = ingredient.image;
 
@@ -38,7 +46,7 @@ function IngredientDetails(props: any) {
 }
 
 IngredientDetails.propTypes = {
-    ingredient: ingredientPropTypes
+    ingredientId: PropTypes.string
 }
 
 export default IngredientDetails;

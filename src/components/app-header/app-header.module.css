@@ -26,6 +26,9 @@
     display: inline-flex;
     align-items: center;
 }
+.navlink.active {
+    text-decoration: none;
+}
 
 .flushRight {
     margin-left: auto;
