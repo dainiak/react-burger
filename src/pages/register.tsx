@@ -21,8 +21,19 @@ export const RegisterPage = () => {
     return (
         <div className={styles.wrapper}>
             <p className="text text_type_main-medium mb-6">
-                Вход
+                Регистрация
             </p>
+            <Input
+                type={"text"}
+                onChange={onPasswordChange}
+                value={'name'}
+                name={'name'}
+                // icon={"ShowIcon"}
+                placeholder={"Имя"}
+                hidden={false}
+                noValidate={true}
+                formNoValidate={true}
+            />
             <EmailInput
                 placeholder={"E-mail"}
                 value={login}
@@ -44,13 +55,10 @@ export const RegisterPage = () => {
             />
 
             <Button htmlType="button" type="primary" size="medium" extraClass="mt-6 mb-20"
-                    onClick={onSubmit}>Войти</Button>
+                    onClick={onSubmit}>Зарегистрироваться</Button>
 
             <p className="text text_type_main-small text_color_inactive mb-6">
-                Вы — новый пользователь? <a href="/register" className={styles.link}>Зарегистрироваться</a>
-            </p>
-            <p className="text text_type_main-small text_color_inactive mb-6">
-                Забыли пароль? <a href="/forgot-password" className={styles.link}>Восстановить пароль</a>
+                Уже зарегистрированы? <a href="/login" className={styles.link}>Войти</a>
             </p>
         </div>
     );

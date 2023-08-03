@@ -21,36 +21,37 @@ export const ResetPasswordPage = () => {
     return (
         <div className={styles.wrapper}>
             <p className="text text_type_main-medium mb-6">
-                Вход
+                Сброс пароля
             </p>
-            <EmailInput
-                placeholder={"E-mail"}
-                value={login}
-                onChange={onLoginChange}
-                name={'email'}
-                size={'default'}
-                extraClass="mb-2 mt-2"
-            />
             <Input
                 type={"password"}
                 onChange={onPasswordChange}
                 value={password}
                 name={'password'}
                 // icon={"ShowIcon"}
-                placeholder={"Пароль"}
+                placeholder={"Введите новый пароль"}
+                hidden={false}
+                noValidate={true}
+                formNoValidate={true}
+            />
+
+            <Input
+                type={"text"}
+                onChange={onPasswordChange}
+                value={password}
+                name={'passwordResetCode'}
+                // icon={"ShowIcon"}
+                placeholder={"Введите код из письма"}
                 hidden={false}
                 noValidate={true}
                 formNoValidate={true}
             />
 
             <Button htmlType="button" type="primary" size="medium" extraClass="mt-6 mb-20"
-                    onClick={onSubmit}>Войти</Button>
+                    onClick={onSubmit}>Сохранить</Button>
 
             <p className="text text_type_main-small text_color_inactive mb-6">
-                Вы — новый пользователь? <a href="/register" className={styles.link}>Зарегистрироваться</a>
-            </p>
-            <p className="text text_type_main-small text_color_inactive mb-6">
-                Забыли пароль? <a href="/forgot-password" className={styles.link}>Восстановить пароль</a>
+                Вспомнили старый пароль? <a href="/login" className={styles.link}>Войти</a>
             </p>
         </div>
     );

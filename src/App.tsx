@@ -10,17 +10,21 @@ import { MainPage } from "./pages/main-page";
 import { Page404 } from "./pages/page-404";
 import { IngredientPage } from "./pages/ingredient";
 import {LoginPage} from "./pages/login";
+import {LogoutPage} from "./pages/logout";
 import {RegisterPage} from "./pages/register";
 import {ForgotPasswordPage} from "./pages/forgot-password";
 import {ResetPasswordPage} from "./pages/reset-password";
 import {ProfilePage} from "./pages/profile";
 import {IngredientDetailsModal} from "./components/ingredient-details-modal/ingredient-details-modal";
 
+import { ProvideAuth } from "./utils/auth";
+
 function App() {
     const location = useLocation();
     const background = location.state && location.state.background;
 
     return (
+        <ProvideAuth>
         <div className="App">
             <AppHeader />
             <DndProvider backend={HTML5Backend}>
@@ -28,6 +32,7 @@ function App() {
                 <Routes location={background || location}>
                     <Route path="/" element={<MainPage />}/>
                     <Route path="/login" element={<LoginPage />}/>
+                    <Route path="/logout" element={<LogoutPage />}/>
                     <Route path="/register" element={<RegisterPage />}/>
                     <Route path="/forgot-password" element={<ForgotPasswordPage />}/>
                     <Route path="/reset-password" element={<ResetPasswordPage />}/>
@@ -46,6 +51,7 @@ function App() {
             </div>
             </DndProvider>
         </div>
+        </ProvideAuth>
     );
 }
 

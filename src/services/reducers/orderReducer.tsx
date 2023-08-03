@@ -1,7 +1,7 @@
 import {POST_ORDER, POST_ORDER_FAILED, POST_ORDER_SUCCESS} from "../actions/order";
 import {initialState} from "./initial-state";
 
-export const order = (state = initialState.order, action: any) => {
+export const orderReducer = (state = initialState.order, action: any) => {
     switch (action.type) {
         case POST_ORDER:
             return {

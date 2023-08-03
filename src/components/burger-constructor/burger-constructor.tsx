@@ -5,7 +5,6 @@ import OrderDetails from "../order-details/order-details";
 import Modal from "../modal/modal";
 import {useDrop} from "react-dnd";
 import {ADD_INGREDIENT, REMOVE_INGREDIENT} from "../../services/actions/burger-constructor";
-import {postOrder} from "../../services/actions/order";
 import {useDispatch, useSelector} from "react-redux";
 import BurgerConstructorDraggableElement
     from "../burger-constructor-draggable-element/burger-constructor-druggable-element";

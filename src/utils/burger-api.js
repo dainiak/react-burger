@@ -1,10 +1,12 @@
+import { setCookie } from './cookies';
+
 const NORMA_API_ENDPOINT = 'https://norma.nomoreparties.space/api'
 
-const checkApiReponse = (res) => {
+export const checkApiReponse = (res) => {
     return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
 };
 
-function getIngredientsByApi() {
+export const getIngredientsByApi = () => {
     return fetch(
         `${NORMA_API_ENDPOINT}/ingredients`
     ).then(
@@ -12,7 +14,7 @@ function getIngredientsByApi() {
     );
 }
 
-function postOrderByApi(ingredients) {
+export const postOrderByApi = (ingredients) => {
     return fetch(
         `${NORMA_API_ENDPOINT}/orders`, {
             method: 'POST',
@@ -128,10 +130,6 @@ function updateUserInfoByApi(accessToken) {
     );
 }
 
-function setCookie() {
-    document.cookie = "username=John Doe; expires=Thu, 18 Dec 2013 12:00:00 UTC";
-}
-
 function refreshToken() {
     return localStorage.getItem("refreshToken") || null;
 }
@@ -156,5 +154,3 @@ export const fetchWithRefresh = async (url, options) => {
         }
     }
 };
-
-export {getIngredientsByApi, checkApiReponse, postOrderByApi };

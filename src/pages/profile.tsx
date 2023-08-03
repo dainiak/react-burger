@@ -1,9 +1,10 @@
 import styles from './profile.module.css';
 import { Input, EmailInput, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import React from "react";
+import {NavLink} from "react-router-dom";
 
 export const ProfilePage = () => {
-    const [login, setLogin] = React.useState('value')
+    const [login, setLogin] = React.useState('value');
     const inputRef = React.useRef(null);
     const onNameChange = (e: any) => {
         setLogin(e.target.value)
@@ -14,7 +15,32 @@ export const ProfilePage = () => {
         alert('Icon Click Callback')
     }
 
-    return (
+    const logout = () => {
+
+    }
+
+    return (<>
+        <div className={styles.wrapperLeft}>
+            <div>
+                <NavLink to={"/profile"} className={({ isActive, isPending }) =>
+                    isActive ? `${styles.navlink} ${styles.active} text text_type_main-medium mb-6` : `${styles.navlink} text text_type_main-medium mb-6 text_color_inactive`
+                }>
+                Профиль
+                </NavLink>
+
+                <NavLink to={"/profile/orders"} className={({ isActive, isPending }) =>
+                    isActive ? `${styles.navlink} ${styles.active} text text_type_main-medium mb-6` : `${styles.navlink} text text_type_main-medium mb-6 text_color_inactive`
+                }>
+                История заказов
+                </NavLink>
+
+                <NavLink to={"/logout"} className={({ isActive, isPending }) =>
+                    isActive ? `${styles.navlink} ${styles.active} text text_type_main-medium mb-6` : `${styles.navlink} text text_type_main-medium mb-6 text_color_inactive`
+                }>
+                Выход
+                </NavLink>
+            </div>
+        </div>
         <div className={styles.wrapper}>
             <Input
                 type={"text"}
@@ -44,5 +70,6 @@ export const ProfilePage = () => {
                 formNoValidate={true}
             />
         </div>
+        </>
     );
 }
