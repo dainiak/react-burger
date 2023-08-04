@@ -1,23 +1,53 @@
 import styles from './profile.module.css';
-import { Input, EmailInput, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
-import React from "react";
-import {NavLink} from "react-router-dom";
+import { Input } from "@ya.praktikum/react-developer-burger-ui-components";
+import React, {useEffect} from "react";
+import {Navigate, NavLink} from "react-router-dom";
+import {getUserInfoByApi} from "../utils/burger-api";
+import {useSelector} from "react-redux";
+import {selectUser} from "../services/selectors/user";
 
 export const ProfilePage = () => {
-    const [login, setLogin] = React.useState('value');
-    const inputRef = React.useRef(null);
+    const [email, setEmail] = React.useState('value');
+    const [password, setPassword] = React.useState('value');
+    const [name, setName] = React.useState('value');
+    const nameInputRef = React.useRef(null);
+    const emailInputRef = React.useRef(null);
+    const passwordInputRef = React.useRef(null);
+    const user = useSelector(selectUser);
+
+
+    useEffect(() => {
+        if(localStorage.getItem('refreshToken'))
+            getUserInfoByApi().then((data) => {
+                setName(data.user.name);
+                setEmail(data.user.email);
+            });
+    }, []);
+
     const onNameChange = (e: any) => {
-        setLogin(e.target.value)
+        setName(e.target.value);
     };
-    const onEditIconClick = () => {
+    const onEmailChange = (e: any) => {
+        setEmail(e.target.value);
+    }
+    const onPasswordChange = (e: any) => {
+        setPassword(e.target.value);
+    }
+    const onNameEditIconClick = () => {
         //@ts-ignore
-        setTimeout(() => inputRef && inputRef.current && inputRef.current.focus(), 0)
-        alert('Icon Click Callback')
+        setTimeout(() => nameInputRef && nameInputRef.current && nameInputRef.current.focus(), 0)
+    }
+    const onEmailEditIconClick = () => {
+        //@ts-ignore
+        setTimeout(() => emailInputRef && emailInputRef.current && emailInputRef.current.focus(), 0)
+    }
+    const onPasswordEditIconClick = () => {
+        //@ts-ignore
+        setTimeout(() => passwordInputRef && passwordInputRef.current && passwordInputRef.current.focus(), 0)
     }
 
-    const logout = () => {
-
-    }
+    if(!user.profile && !localStorage.getItem('refreshToken'))
+        return <Navigate to="/login"/>;
 
     return (<>
         <div className={styles.wrapperLeft}>
@@ -45,29 +75,41 @@ export const ProfilePage = () => {
             <Input
                 type={"text"}
                 placeholder={"Имя"}
-                value={login}
+                value={name}
                 onChange={onNameChange}
                 error={false}
-                ref={inputRef}
+                ref={nameInputRef}
                 icon={'EditIcon'}
-                onIconClick={onEditIconClick}
+                onIconClick={onNameEditIconClick}
                 errorText={'Ошибка'}
                 size={'default'}
                 extraClass="mb-2"
             />
-            <EmailInput
-                onChange={onNameChange}
-                value={"mark@example.com"}
-                name={'email'}
+            <Input
+                type={"email"}
+                placeholder={"E-mail"}
+                value={email}
+                onChange={onEmailChange}
+                error={false}
+                ref={emailInputRef}
+                icon={'EditIcon'}
+                onIconClick={onEmailEditIconClick}
+                errorText={'Ошибка'}
+                size={'default'}
                 extraClass="mb-2"
             />
-            <PasswordInput
-                onChange={onNameChange}
-                value={"value"}
-                name={'password'}
-                noValidate={true}
-                icon={"EditIcon"}
-                formNoValidate={true}
+            <Input
+                type={"password"}
+                placeholder={"Пароль"}
+                value={password}
+                onChange={onPasswordChange}
+                error={false}
+                ref={passwordInputRef}
+                icon={'EditIcon'}
+                onIconClick={onPasswordEditIconClick}
+                errorText={'Ошибка'}
+                size={'default'}
+                extraClass="mb-2"
             />
         </div>
         </>

@@ -1,12 +1,48 @@
-import { setCookie } from './cookies';
+import {getCookie, setCookie} from './cookies';
 
 const NORMA_API_ENDPOINT = 'https://norma.nomoreparties.space/api'
 
-export const checkApiReponse = (res) => {
+const checkApiReponse = (res) => {
     return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
 };
 
-export const getIngredientsByApi = () => {
+const refreshTokens = async () => {
+    return fetch(
+        `${NORMA_API_ENDPOINT}/auth/token`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body:  JSON.stringify({token: localStorage.getItem("refreshToken")})
+        }
+    ).then(
+        checkApiReponse
+    );
+}
+
+const fetchWithRefresh = async (url, options) => {
+    try {
+        options.headers.authorization = getCookie("token");
+        const res = await fetch(url, options);
+        return res;
+    } catch (err) {
+        if (err.message === "jwt expired") {
+            const refreshData = await refreshTokens();
+            if (!refreshData.success) {
+                return Promise.reject(refreshData);
+            }
+            console.log("refreshData", refreshData);
+            localStorage.setItem("refreshToken", refreshData.refreshToken);
+            setCookie("token", refreshData.accessToken);
+            options.headers.authorization = refreshData.accessToken;
+            return fetch(url, options).then(checkApiReponse);
+        } else {
+            return Promise.reject(err);
+        }
+    }
+};
+
+export const getIngredientsByApi = async () => {
     return fetch(
         `${NORMA_API_ENDPOINT}/ingredients`
     ).then(
@@ -14,8 +50,8 @@ export const getIngredientsByApi = () => {
     );
 }
 
-export const postOrderByApi = (ingredients) => {
-    return fetch(
+export const postOrderByApi = async (ingredients) => {
+    return fetchWithRefresh(
         `${NORMA_API_ENDPOINT}/orders`, {
             method: 'POST',
             headers: {
@@ -28,8 +64,8 @@ export const postOrderByApi = (ingredients) => {
     );
 }
 
-function resetPasswordByApi(email) {
-    return fetch(
+export const resetPasswordByApi = async (email) => {
+    return fetchWithRefresh(
         `${NORMA_API_ENDPOINT}/password-reset`, {
             method: 'POST',
             headers: {
@@ -42,7 +78,7 @@ function resetPasswordByApi(email) {
     );
 }
 
-function registerByApi(email, password, name) {
+export const registerUserByApi = async (email, password, name) => {
     return fetch(
         `${NORMA_API_ENDPOINT}/auth/register`, {
             method: 'POST',
@@ -60,97 +96,62 @@ function registerByApi(email, password, name) {
     );
 }
 
-function loginByApi(email) {
+export const loginUserByApi = async (email, password) => {
     return fetch(
         `${NORMA_API_ENDPOINT}/auth/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body:  JSON.stringify({email: email})
+            body:  JSON.stringify({
+                "email": email,
+                "password": password,
+            })
         }
     ).then(
         checkApiReponse
     );
 }
 
-function logoutByApi(refreshToken) {
+export const logoutUserByApi = async () => {
+    const token = localStorage.getItem('refreshToken');
     return fetch(
         `${NORMA_API_ENDPOINT}/auth/logout`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body:  JSON.stringify({token: refreshToken})
+            body:  JSON.stringify({token})
         }
     ).then(
         checkApiReponse
     );
 }
 
-function getTokenByApi(email) {
-    return fetch(
-        `${NORMA_API_ENDPOINT}/auth/token`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body:  JSON.stringify({email: email})
-        }
-    ).then(
-        checkApiReponse
-    );
-}
-
-function getUserInfoByApi(accessToken) {
-    return fetch(
+export const getUserInfoByApi = async () => {
+    return fetchWithRefresh(
         `${NORMA_API_ENDPOINT}/auth/user`, {
-            method: 'POST',
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
-            },
-            body:  JSON.stringify({token: accessToken})
+            }
         }
     ).then(
         checkApiReponse
     );
 }
 
-function updateUserInfoByApi(accessToken) {
-    return fetch(
+export const updateUserInfoByApi = async () => {
+    return fetchWithRefresh(
         `${NORMA_API_ENDPOINT}/auth/user`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body:  JSON.stringify({token: accessToken})
+            body:  JSON.stringify({token: getCookie("token")})
         }
     ).then(
         checkApiReponse
     );
 }
 
-function refreshToken() {
-    return localStorage.getItem("refreshToken") || null;
-}
-
-export const fetchWithRefresh = async (url, options) => {
-    try {
-        const res = await fetch(url, options);
-        return await checkApiReponse(res);
-    } catch (err) {
-        if (err.message === "jwt expired") {
-            const refreshData = await refreshToken();
-            if (!refreshData.success) {
-                return Promise.reject(refreshData);
-            }
-            localStorage.setItem("refreshToken", refreshData.refreshToken);
-            setCookie("accessToken", refreshData.accessToken);
-            options.headers.authorization = refreshData.accessToken;
-            const res = await fetch(url, options);
-            return await checkApiReponse(res);
-        } else {
-            return Promise.reject(err);
-        }
-    }
-};

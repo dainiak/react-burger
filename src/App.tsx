@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import {Routes, Route, useLocation} from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 
 import AppHeader from './components/app-header/app-header';
 
@@ -9,15 +9,16 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { MainPage } from "./pages/main-page";
 import { Page404 } from "./pages/page-404";
 import { IngredientPage } from "./pages/ingredient";
-import {LoginPage} from "./pages/login";
-import {LogoutPage} from "./pages/logout";
-import {RegisterPage} from "./pages/register";
-import {ForgotPasswordPage} from "./pages/forgot-password";
-import {ResetPasswordPage} from "./pages/reset-password";
-import {ProfilePage} from "./pages/profile";
-import {IngredientDetailsModal} from "./components/ingredient-details-modal/ingredient-details-modal";
+import { LoginPage } from "./pages/login";
+import { LogoutPage } from "./pages/logout";
+import { RegisterPage } from "./pages/register";
+import { ForgotPasswordPage } from "./pages/forgot-password";
+import { ResetPasswordPage } from "./pages/reset-password";
+import { ProfilePage } from "./pages/profile";
+import { IngredientDetailsModal } from "./components/ingredient-details-modal/ingredient-details-modal";
 
 import { ProvideAuth } from "./utils/auth";
+import {ProtectedRouteElement} from "./components/protected-route-element/protected-route-element";
 
 function App() {
     const location = useLocation();

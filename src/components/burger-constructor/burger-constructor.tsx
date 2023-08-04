@@ -10,6 +10,7 @@ import BurgerConstructorDraggableElement
     from "../burger-constructor-draggable-element/burger-constructor-druggable-element";
 import {selectBurgerConstructorBun, selectBurgerConstructorItems} from "../../services/selectors/burger-constructor";
 import {selectOrderNumber} from "../../services/selectors/order";
+import {postOrder} from "../../services/actions/order";
 
 function BurgerConstructor() {
     const [orderDetailsVisible, setOrderDetailsVisible] = React.useState(false);

@@ -15,5 +15,9 @@ export const initialState = {
         hasError: false
     },
     currentIngredient: null,
-    user: null
+    user: {
+        profile: null,
+        isLoading: false,
+        hasError: false
+    }
 };

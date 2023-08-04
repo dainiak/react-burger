@@ -1,0 +1,1 @@
+export const selectUser = (store: any) => store.user;
