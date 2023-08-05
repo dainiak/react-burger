@@ -6,6 +6,8 @@ import {updateUserInfoByApi} from "../utils/burger-api";
 import {useSelector} from "react-redux";
 import {selectUser} from "../services/selectors/user";
 import {ROUTE_LOGOUT, ROUTE_ORDERS, ROUTE_PROFILE} from "../utils/routes";
+import {loadUserProfile} from "../services/actions/user";
+import {useDispatch} from "react-redux";
 
 export const ProfilePage = () => {
     const [email, setEmail] = React.useState('');
@@ -18,6 +20,7 @@ export const ProfilePage = () => {
     const emailInputRef = React.useRef(null);
     const passwordInputRef = React.useRef(null);
     const user = useSelector(selectUser);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         setName(user.profile.name);
@@ -36,9 +39,9 @@ export const ProfilePage = () => {
     const onNameIconClick = () => {
         if(isEditingName) {
             setIsEditingName(false);
-            updateUserInfoByApi(email, name).then((data) => {
-                setName(data.user.name);
-                setEmail(data.user.email);
+            updateUserInfoByApi({name}).then(() => {
+                // @ts-ignore
+                dispatch(loadUserProfile());
             });
         }
         else {
@@ -48,9 +51,9 @@ export const ProfilePage = () => {
     const onEmailIconClick = () => {
         if(isEditingEmail) {
             setIsEditingEmail(false);
-            updateUserInfoByApi(email, name).then((data) => {
-                setName(data.user.name);
-                setEmail(data.user.email);
+            updateUserInfoByApi({email}).then(() => {
+                // @ts-ignore
+                dispatch(loadUserProfile());
             });
         }
         else {
@@ -60,10 +63,9 @@ export const ProfilePage = () => {
     const onPasswordIconClick = () => {
         if(isEditingPassword) {
             setIsEditingPassword(false);
-            updateUserInfoByApi(email, name, password).then((data) => {
-                setName(data.user.name);
-                setEmail(data.user.email);
-                setPassword('');
+            updateUserInfoByApi({password}).then(() => {
+                // @ts-ignore
+                dispatch(loadUserProfile());
             });
         }
         else {
@@ -74,19 +76,19 @@ export const ProfilePage = () => {
     return (<>
         <div className={styles.wrapperLeft}>
             <div>
-                <NavLink to={ROUTE_PROFILE} className={({ isActive, isPending }) =>
+                <NavLink to={ROUTE_PROFILE} className={({ isActive }) =>
                     isActive ? `${styles.navlink} ${styles.active} text text_type_main-medium mb-6` : `${styles.navlink} text text_type_main-medium mb-6 text_color_inactive`
                 }>
                 Профиль
                 </NavLink>
 
-                <NavLink to={ROUTE_ORDERS} className={({ isActive, isPending }) =>
+                <NavLink to={ROUTE_ORDERS} className={({ isActive }) =>
                     isActive ? `${styles.navlink} ${styles.active} text text_type_main-medium mb-6` : `${styles.navlink} text text_type_main-medium mb-6 text_color_inactive`
                 }>
                 История заказов
                 </NavLink>
 
-                <NavLink to={ROUTE_LOGOUT} className={({ isActive, isPending }) =>
+                <NavLink to={ROUTE_LOGOUT} className={({ isActive }) =>
                     isActive ? `${styles.navlink} ${styles.active} text text_type_main-medium mb-6` : `${styles.navlink} text text_type_main-medium mb-6 text_color_inactive`
                 }>
                 Выход
@@ -101,7 +103,7 @@ export const ProfilePage = () => {
                 onChange={onNameChange}
                 error={false}
                 ref={nameInputRef}
-                icon={isEditingName ? 'CheckMarkIcon' : 'EditIcon'}
+                icon={isEditingName ? 'CheckMarkIcon' : isEditingPassword||isEditingEmail ? undefined : 'EditIcon'}
                 onIconClick={onNameIconClick}
                 disabled={!isEditingName}
                 errorText={'Ошибка'}
@@ -115,7 +117,7 @@ export const ProfilePage = () => {
                 onChange={onEmailChange}
                 error={false}
                 ref={emailInputRef}
-                icon={isEditingEmail ? 'CheckMarkIcon' : 'EditIcon'}
+                icon={isEditingEmail ? 'CheckMarkIcon' : isEditingPassword||isEditingName ? undefined : 'EditIcon'}
                 onIconClick={onEmailIconClick}
                 disabled={!isEditingEmail}
                 errorText={'Ошибка'}
@@ -129,7 +131,7 @@ export const ProfilePage = () => {
                 onChange={onPasswordChange}
                 error={false}
                 ref={passwordInputRef}
-                icon={isEditingPassword ? 'CheckMarkIcon' : 'EditIcon'}
+                icon={isEditingPassword ? 'CheckMarkIcon' : isEditingEmail||isEditingName ? undefined : 'EditIcon'}
                 disabled={!isEditingPassword}
                 onIconClick={onPasswordIconClick}
                 errorText={'Ошибка'}

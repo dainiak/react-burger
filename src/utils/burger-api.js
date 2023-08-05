@@ -158,14 +158,14 @@ export const getUserInfoByApi = async () => {
     );
 }
 
-export const updateUserInfoByApi = async (email, name, password) => {
+export const updateUserInfoByApi = async (values) => {
     return fetchWithRefresh(
         `${NORMA_API_ENDPOINT}/auth/user`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body:  JSON.stringify({email, name, password})
+            body:  JSON.stringify(values)
         }
     ).then(
         checkApiReponse

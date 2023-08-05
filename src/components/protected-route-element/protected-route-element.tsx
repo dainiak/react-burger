@@ -2,9 +2,10 @@ import { Navigate } from 'react-router-dom';
 import {selectUser} from "../../services/selectors/user";
 import {useSelector} from "react-redux";
 import React from "react";
-import {LOGIN_SUCCESS, LOGOUT} from "../../services/actions/user";
+import {LOGIN_SUCCESS} from "../../services/actions/user";
 import {getUserInfoByApi} from "../../utils/burger-api";
 import {useDispatch} from "react-redux";
+import {logoutUser} from "../../services/actions/user";
 
 //@ts-ignore
 export const AuthOnly = ({ element, alternative }) => {
@@ -24,9 +25,8 @@ export const AuthOnly = ({ element, alternative }) => {
                 setLoading(false);
             }
             else{
-                dispatch({
-                    type: LOGOUT
-                })
+                // @ts-ignore
+                dispatch(logoutUser());
                 setLoading(false);
             }
         });
@@ -57,9 +57,8 @@ export const NonAuthOnly = ({ element, alternative }) => {
                 setLoading(false);
             }
             else{
-                dispatch({
-                    type: LOGOUT
-                })
+                // @ts-ignore
+                dispatch(logoutUser());
                 setLoading(false);
             }
         });
