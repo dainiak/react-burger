@@ -23,8 +23,7 @@ const refreshTokens = async () => {
 const fetchWithRefresh = async (url, options) => {
     try {
         options.headers.authorization = getCookie("token");
-        const res = await fetch(url, options);
-        return res;
+        return await fetch(url, options);
     } catch (err) {
         if (err.message === "jwt expired") {
             const refreshData = await refreshTokens();
@@ -80,7 +79,7 @@ export const sendPasswordResetEmailByApi = async (email) => {
 
 export const resetPasswordByApi = async (password, token) => {
     return fetch(
-        `${NORMA_API_ENDPOINT}/password-reset`, {
+        `${NORMA_API_ENDPOINT}/password-reset/reset`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -127,19 +126,23 @@ export const loginUserByApi = async (email, password) => {
     );
 }
 
-export const logoutUserByApi = async () => {
-    const token = localStorage.getItem('refreshToken');
-    return fetch(
-        `${NORMA_API_ENDPOINT}/auth/logout`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body:  JSON.stringify({token})
-        }
-    ).then(
-        checkApiReponse
-    );
+export const logoutUserByApi = async (token) => {
+    try {
+        fetch(
+            `${NORMA_API_ENDPOINT}/auth/logout`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({token})
+            }
+        ).then(
+            checkApiReponse
+        )
+    }
+    catch (err) {
+        return Promise.reject(err);
+    }
 }
 
 export const getUserInfoByApi = async () => {
@@ -155,14 +158,14 @@ export const getUserInfoByApi = async () => {
     );
 }
 
-export const updateUserInfoByApi = async (email, name) => {
+export const updateUserInfoByApi = async (email, name, password) => {
     return fetchWithRefresh(
         `${NORMA_API_ENDPOINT}/auth/user`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body:  JSON.stringify({email, name})
+            body:  JSON.stringify({email, name, password})
         }
     ).then(
         checkApiReponse

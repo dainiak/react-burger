@@ -2,9 +2,10 @@ import styles from './profile.module.css';
 import { Input } from "@ya.praktikum/react-developer-burger-ui-components";
 import React, {useEffect} from "react";
 import {NavLink} from "react-router-dom";
-import {getUserInfoByApi, updateUserInfoByApi} from "../utils/burger-api";
+import {updateUserInfoByApi} from "../utils/burger-api";
 import {useSelector} from "react-redux";
 import {selectUser} from "../services/selectors/user";
+import {ROUTE_LOGOUT, ROUTE_ORDERS, ROUTE_PROFILE} from "../utils/routes";
 
 export const ProfilePage = () => {
     const [email, setEmail] = React.useState('');
@@ -18,13 +19,9 @@ export const ProfilePage = () => {
     const passwordInputRef = React.useRef(null);
     const user = useSelector(selectUser);
 
-
     useEffect(() => {
-        if(localStorage.getItem('refreshToken'))
-            getUserInfoByApi().then((data) => {
-                setName(data.user.name);
-                setEmail(data.user.email);
-            });
+        setName(user.profile.name);
+        setEmail(user.profile.email);
     }, []);
 
     const onNameChange = (e: any) => {
@@ -61,25 +58,35 @@ export const ProfilePage = () => {
         }
     }
     const onPasswordIconClick = () => {
-
+        if(isEditingPassword) {
+            setIsEditingPassword(false);
+            updateUserInfoByApi(email, name, password).then((data) => {
+                setName(data.user.name);
+                setEmail(data.user.email);
+                setPassword('');
+            });
+        }
+        else {
+            setIsEditingPassword(true);
+        }
     }
 
     return (<>
         <div className={styles.wrapperLeft}>
             <div>
-                <NavLink to={"/profile"} className={({ isActive, isPending }) =>
+                <NavLink to={ROUTE_PROFILE} className={({ isActive, isPending }) =>
                     isActive ? `${styles.navlink} ${styles.active} text text_type_main-medium mb-6` : `${styles.navlink} text text_type_main-medium mb-6 text_color_inactive`
                 }>
                 Профиль
                 </NavLink>
 
-                <NavLink to={"/profile/orders"} className={({ isActive, isPending }) =>
+                <NavLink to={ROUTE_ORDERS} className={({ isActive, isPending }) =>
                     isActive ? `${styles.navlink} ${styles.active} text text_type_main-medium mb-6` : `${styles.navlink} text text_type_main-medium mb-6 text_color_inactive`
                 }>
                 История заказов
                 </NavLink>
 
-                <NavLink to={"/logout"} className={({ isActive, isPending }) =>
+                <NavLink to={ROUTE_LOGOUT} className={({ isActive, isPending }) =>
                     isActive ? `${styles.navlink} ${styles.active} text text_type_main-medium mb-6` : `${styles.navlink} text text_type_main-medium mb-6 text_color_inactive`
                 }>
                 Выход
@@ -123,12 +130,13 @@ export const ProfilePage = () => {
                 error={false}
                 ref={passwordInputRef}
                 icon={isEditingPassword ? 'CheckMarkIcon' : 'EditIcon'}
-                disabled={true}
+                disabled={!isEditingPassword}
                 onIconClick={onPasswordIconClick}
                 errorText={'Ошибка'}
                 size={'default'}
                 extraClass="mb-2"
             />
+            {isEditingEmail || isEditingName || isEditingPassword ? <p className="text text_type_main-default text_color_inactive mb-2">Для сохранения изменений нажмите на иконку ✔</p> : null}
         </div>
         </>
     );

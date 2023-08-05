@@ -1,5 +1,4 @@
 import {getUserInfoByApi, loginUserByApi, logoutUserByApi, registerUserByApi,} from "../../utils/burger-api";
-import {POST_ORDER, POST_ORDER_FAILED, POST_ORDER_SUCCESS} from "./order";
 import {deleteCookie, setCookie} from "../../utils/cookies";
 export const LOGIN = 'LOGIN';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
@@ -56,11 +55,13 @@ export const registerUser = (email: any, password: any, name: any) => {
 }
 
 export const logoutUser = () => {
+    const token = localStorage.getItem('refreshToken');
+    deleteCookie('token');
+    localStorage.removeItem('refreshToken');
+
     return (dispatch :any) => {
-        dispatch({ type: LOGOUT });
-        logoutUserByApi().finally(() => {
-            deleteCookie('token');
-            localStorage.removeItem('refreshToken');
+        logoutUserByApi(token).finally(() => {
+            dispatch({ type: LOGOUT });
         });
     }
 }

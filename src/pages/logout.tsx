@@ -5,6 +5,6 @@ import {logoutUser} from "../services/actions/user";
 export const LogoutPage = () => {
     const dispatch = useDispatch();
     // @ts-ignore
-    localStorage.getItem('refreshToken') && dispatch(logoutUser());
+    dispatch(logoutUser());
     return (<Navigate to="/login" replace/>);
 }

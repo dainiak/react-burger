@@ -19,6 +19,14 @@ import { IngredientDetailsModal } from "./components/ingredient-details-modal/in
 
 import { ProvideAuth } from "./utils/auth";
 import {AuthOnly, NonAuthOnly} from "./components/protected-route-element/protected-route-element";
+import {
+    ROUTE_FORGOT_PASSWORD, ROUTE_INGREDIENTS,
+    ROUTE_LOGIN,
+    ROUTE_LOGOUT, ROUTE_PROFILE,
+    ROUTE_REGISTER,
+    ROUTE_RESET_PASSWORD,
+    ROUTE_ROOT
+} from "./utils/routes";
 
 function App() {
     const location = useLocation();
@@ -31,22 +39,33 @@ function App() {
             <DndProvider backend={HTML5Backend}>
             <div className="app-main-div">
                 <Routes location={background || location}>
-                    <Route path="/" element={<MainPage />}/>
-                    <Route path="/login" element={<LoginPage />}/>
-                    <Route path="/logout" element={<LogoutPage />}/>
-                    <Route path="/register" element={<RegisterPage />}/>
-                    <Route path="/forgot-password" element={<ForgotPasswordPage />}/>
-                    <Route path="/reset-password" element={<NonAuthOnly element={<ResetPasswordPage />} alternative={'/'} />} />
-                    <Route path="/profile" element={<AuthOnly element={<ProfilePage />} alternative={'/login'}/>} />
-                    <Route path="/ingredients">
+                    <Route path={ROUTE_ROOT} element={<MainPage />}/>
+
+                    <Route path={ROUTE_PROFILE}
+                           element={<AuthOnly element={<ProfilePage />} alternative={ROUTE_LOGIN}/>} />
+
+                    <Route path={ROUTE_LOGIN}
+                           element={<NonAuthOnly element={<LoginPage />} alternative={ROUTE_PROFILE} />} />
+                    <Route path={ROUTE_LOGOUT} element={<LogoutPage />}/>
+
+                    <Route path={ROUTE_REGISTER}
+                           element={<NonAuthOnly element={<RegisterPage />} alternative={ROUTE_PROFILE} />} />
+                    <Route path={ROUTE_FORGOT_PASSWORD}
+                           element={<NonAuthOnly element={<ForgotPasswordPage />} alternative={ROUTE_PROFILE} />} />
+                    <Route path={ROUTE_RESET_PASSWORD}
+                           element={<NonAuthOnly element={<ResetPasswordPage />} alternative={ROUTE_PROFILE} />} />
+
+
+                    <Route path={ROUTE_INGREDIENTS}>
                         <Route path={":id"} element={<IngredientPage />}/>
                     </Route>
+
                     <Route path="*" element={<Page404/>} />
                 </Routes>
 
                 {background && (
                     <Routes>
-                        <Route path="/ingredients/:id" element={<IngredientDetailsModal/>} />
+                        <Route path={`${ROUTE_INGREDIENTS}/:id`} element={<IngredientDetailsModal/>} />
                     </Routes>
                 )}
             </div>
