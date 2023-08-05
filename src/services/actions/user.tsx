@@ -59,6 +59,9 @@ export const logoutUser = () => {
     deleteCookie('token');
     localStorage.removeItem('refreshToken');
 
+    if(!token) return (dispatch :any) => {
+        dispatch({ type: LOGOUT });
+    }
     return (dispatch :any) => {
         logoutUserByApi(token).finally(() => {
             dispatch({ type: LOGOUT });

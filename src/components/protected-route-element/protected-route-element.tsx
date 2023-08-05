@@ -6,10 +6,8 @@ import {LOGIN_SUCCESS} from "../../services/actions/user";
 import {getUserInfoByApi} from "../../utils/burger-api";
 import {useDispatch} from "react-redux";
 import {logoutUser} from "../../services/actions/user";
-import {ingredientPropTypes} from "../../utils/prop-types";
 import PropTypes from "prop-types";
-import IngredientCard from "../ingredient-card/ingredient-card";
-import {ReactComponent} from "*.svg";
+
 
 //@ts-ignore
 export const AuthOnly = ({ element, alternative }) => {

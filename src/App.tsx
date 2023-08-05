@@ -17,7 +17,6 @@ import { ResetPasswordPage } from "./pages/reset-password";
 import { ProfilePage } from "./pages/profile";
 import { IngredientDetailsModal } from "./components/ingredient-details-modal/ingredient-details-modal";
 
-import { ProvideAuth } from "./utils/auth";
 import {AuthOnly, NonAuthOnly} from "./components/protected-route-element/protected-route-element";
 import {
     ROUTE_FORGOT_PASSWORD, ROUTE_INGREDIENTS,
@@ -33,7 +32,6 @@ function App() {
     const background = location.state && location.state.background;
 
     return (
-        <ProvideAuth>
         <div className="App">
             <AppHeader />
             <DndProvider backend={HTML5Backend}>
@@ -71,7 +69,6 @@ function App() {
             </div>
             </DndProvider>
         </div>
-        </ProvideAuth>
     );
 }
 
