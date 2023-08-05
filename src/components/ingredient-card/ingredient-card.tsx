@@ -6,7 +6,7 @@ import {useDrag} from "react-dnd";
 import {ingredientPropTypes} from "../../utils/prop-types";
 
 function IngredientCard(props: any) {
-    const text = props.ingredientItem.text;
+    const text = props.ingredientItem.name;
     const price = props.ingredientItem.price;
     const thumbnail = props.ingredientItem.image;
 
@@ -35,7 +35,7 @@ function IngredientCard(props: any) {
 IngredientCard.propTypes = {
     ingredientItem: ingredientPropTypes,
     count: PropTypes.number.isRequired,
-    onClick: PropTypes.func.isRequired
+    onClick: PropTypes.func.isRequired,
 }
 
 export default IngredientCard;
