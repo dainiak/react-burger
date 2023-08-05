@@ -64,14 +64,28 @@ export const postOrderByApi = async (ingredients) => {
     );
 }
 
-export const resetPasswordByApi = async (email) => {
-    return fetchWithRefresh(
+export const sendPasswordResetEmailByApi = async (email) => {
+    return fetch(
         `${NORMA_API_ENDPOINT}/password-reset`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body:  JSON.stringify({email: email})
+            body:  JSON.stringify({email})
+        }
+    ).then(
+        checkApiReponse
+    );
+}
+
+export const resetPasswordByApi = async (password, token) => {
+    return fetch(
+        `${NORMA_API_ENDPOINT}/password-reset`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body:  JSON.stringify({password, token})
         }
     ).then(
         checkApiReponse
@@ -141,14 +155,14 @@ export const getUserInfoByApi = async () => {
     );
 }
 
-export const updateUserInfoByApi = async () => {
+export const updateUserInfoByApi = async (email, name) => {
     return fetchWithRefresh(
         `${NORMA_API_ENDPOINT}/auth/user`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body:  JSON.stringify({token: getCookie("token")})
+            body:  JSON.stringify({email, name})
         }
     ).then(
         checkApiReponse

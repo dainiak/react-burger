@@ -1,15 +1,18 @@
 import styles from './profile.module.css';
 import { Input } from "@ya.praktikum/react-developer-burger-ui-components";
 import React, {useEffect} from "react";
-import {Navigate, NavLink} from "react-router-dom";
-import {getUserInfoByApi} from "../utils/burger-api";
+import {NavLink} from "react-router-dom";
+import {getUserInfoByApi, updateUserInfoByApi} from "../utils/burger-api";
 import {useSelector} from "react-redux";
 import {selectUser} from "../services/selectors/user";
 
 export const ProfilePage = () => {
-    const [email, setEmail] = React.useState('value');
-    const [password, setPassword] = React.useState('value');
-    const [name, setName] = React.useState('value');
+    const [email, setEmail] = React.useState('');
+    const [isEditingEmail, setIsEditingEmail] = React.useState(false);
+    const [password, setPassword] = React.useState('');
+    const [isEditingPassword, setIsEditingPassword] = React.useState(false);
+    const [name, setName] = React.useState('');
+    const [isEditingName, setIsEditingName] = React.useState(false);
     const nameInputRef = React.useRef(null);
     const emailInputRef = React.useRef(null);
     const passwordInputRef = React.useRef(null);
@@ -25,29 +28,41 @@ export const ProfilePage = () => {
     }, []);
 
     const onNameChange = (e: any) => {
-        setName(e.target.value);
+        isEditingName && setName(e.target.value);
     };
     const onEmailChange = (e: any) => {
-        setEmail(e.target.value);
+        isEditingEmail && setEmail(e.target.value);
     }
     const onPasswordChange = (e: any) => {
-        setPassword(e.target.value);
+        isEditingPassword && setPassword(e.target.value);
     }
-    const onNameEditIconClick = () => {
-        //@ts-ignore
-        setTimeout(() => nameInputRef && nameInputRef.current && nameInputRef.current.focus(), 0)
+    const onNameIconClick = () => {
+        if(isEditingName) {
+            setIsEditingName(false);
+            updateUserInfoByApi(email, name).then((data) => {
+                setName(data.user.name);
+                setEmail(data.user.email);
+            });
+        }
+        else {
+            setIsEditingName(true);
+        }
     }
-    const onEmailEditIconClick = () => {
-        //@ts-ignore
-        setTimeout(() => emailInputRef && emailInputRef.current && emailInputRef.current.focus(), 0)
+    const onEmailIconClick = () => {
+        if(isEditingEmail) {
+            setIsEditingEmail(false);
+            updateUserInfoByApi(email, name).then((data) => {
+                setName(data.user.name);
+                setEmail(data.user.email);
+            });
+        }
+        else {
+            setIsEditingEmail(true);
+        }
     }
-    const onPasswordEditIconClick = () => {
-        //@ts-ignore
-        setTimeout(() => passwordInputRef && passwordInputRef.current && passwordInputRef.current.focus(), 0)
-    }
+    const onPasswordIconClick = () => {
 
-    if(!user.profile && !localStorage.getItem('refreshToken'))
-        return <Navigate to="/login"/>;
+    }
 
     return (<>
         <div className={styles.wrapperLeft}>
@@ -79,8 +94,9 @@ export const ProfilePage = () => {
                 onChange={onNameChange}
                 error={false}
                 ref={nameInputRef}
-                icon={'EditIcon'}
-                onIconClick={onNameEditIconClick}
+                icon={isEditingName ? 'CheckMarkIcon' : 'EditIcon'}
+                onIconClick={onNameIconClick}
+                disabled={!isEditingName}
                 errorText={'Ошибка'}
                 size={'default'}
                 extraClass="mb-2"
@@ -92,8 +108,9 @@ export const ProfilePage = () => {
                 onChange={onEmailChange}
                 error={false}
                 ref={emailInputRef}
-                icon={'EditIcon'}
-                onIconClick={onEmailEditIconClick}
+                icon={isEditingEmail ? 'CheckMarkIcon' : 'EditIcon'}
+                onIconClick={onEmailIconClick}
+                disabled={!isEditingEmail}
                 errorText={'Ошибка'}
                 size={'default'}
                 extraClass="mb-2"
@@ -105,8 +122,9 @@ export const ProfilePage = () => {
                 onChange={onPasswordChange}
                 error={false}
                 ref={passwordInputRef}
-                icon={'EditIcon'}
-                onIconClick={onPasswordEditIconClick}
+                icon={isEditingPassword ? 'CheckMarkIcon' : 'EditIcon'}
+                disabled={true}
+                onIconClick={onPasswordIconClick}
                 errorText={'Ошибка'}
                 size={'default'}
                 extraClass="mb-2"

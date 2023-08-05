@@ -18,7 +18,7 @@ import { ProfilePage } from "./pages/profile";
 import { IngredientDetailsModal } from "./components/ingredient-details-modal/ingredient-details-modal";
 
 import { ProvideAuth } from "./utils/auth";
-import {ProtectedRouteElement} from "./components/protected-route-element/protected-route-element";
+import {AuthOnly, NonAuthOnly} from "./components/protected-route-element/protected-route-element";
 
 function App() {
     const location = useLocation();
@@ -36,8 +36,8 @@ function App() {
                     <Route path="/logout" element={<LogoutPage />}/>
                     <Route path="/register" element={<RegisterPage />}/>
                     <Route path="/forgot-password" element={<ForgotPasswordPage />}/>
-                    <Route path="/reset-password" element={<ResetPasswordPage />}/>
-                    <Route path="/profile" element={<ProfilePage />}/>
+                    <Route path="/reset-password" element={<NonAuthOnly element={<ResetPasswordPage />} alternative={'/'} />} />
+                    <Route path="/profile" element={<AuthOnly element={<ProfilePage />} alternative={'/login'}/>} />
                     <Route path="/ingredients">
                         <Route path={":id"} element={<IngredientPage />}/>
                     </Route>

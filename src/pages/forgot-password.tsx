@@ -1,21 +1,23 @@
 import styles from "./forgot-password.module.css";
 import {Button, EmailInput, Input} from "@ya.praktikum/react-developer-burger-ui-components";
 import React from "react";
+import {sendPasswordResetEmailByApi} from "../utils/burger-api";
+import {useNavigate} from "react-router-dom";
 
 
 export const ForgotPasswordPage = () => {
-    const [login, setLogin] = React.useState('');
-    const [password, setPassword] = React.useState('');
-    const onLoginChange = (e: any) => {
-        setLogin(e.target.value)
-    }
-    const onPasswordChange = (e: any) => {
-        setPassword(e.target.value);
+    const [email, setEmail] = React.useState('');
+    const navigate = useNavigate();
+
+    const onEmailChange = (e: any) => {
+        setEmail(e.target.value)
     }
 
     const onSubmit = (e: any) => {
         e.preventDefault();
-        console.log('submit');
+        sendPasswordResetEmailByApi(email).then(() => {
+            navigate('/reset-password', {replace: true});
+        });
     }
 
     return (
@@ -26,8 +28,8 @@ export const ForgotPasswordPage = () => {
                 </p>
                 <EmailInput
                     placeholder={"Укажите свой e-mail"}
-                    value={login}
-                    onChange={onLoginChange}
+                    value={email}
+                    onChange={onEmailChange}
                     name={'email'}
                     size={'default'}
                     extraClass="mb-2 mt-2"

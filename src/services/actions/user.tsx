@@ -58,7 +58,7 @@ export const registerUser = (email: any, password: any, name: any) => {
 export const logoutUser = () => {
     return (dispatch :any) => {
         dispatch({ type: LOGOUT });
-        logoutUserByApi().then(() => {
+        logoutUserByApi().finally(() => {
             deleteCookie('token');
             localStorage.removeItem('refreshToken');
         });
@@ -75,3 +75,4 @@ export const loadUserProfile = () => {
         });
     }
 }
+
