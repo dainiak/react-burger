@@ -5,12 +5,14 @@ import OrderDetails from "../order-details/order-details";
 import Modal from "../modal/modal";
 import {useDrop} from "react-dnd";
 import {ADD_INGREDIENT, REMOVE_INGREDIENT} from "../../services/actions/burger-constructor";
-import {postOrder} from "../../services/actions/order";
 import {useDispatch, useSelector} from "react-redux";
 import BurgerConstructorDraggableElement
     from "../burger-constructor-draggable-element/burger-constructor-druggable-element";
 import {selectBurgerConstructorBun, selectBurgerConstructorItems} from "../../services/selectors/burger-constructor";
 import {selectOrderNumber} from "../../services/selectors/order";
+import {postOrder} from "../../services/actions/order";
+import {selectUser} from "../../services/selectors/user";
+import {useNavigate} from "react-router-dom";
 
 function BurgerConstructor() {
     const [orderDetailsVisible, setOrderDetailsVisible] = React.useState(false);
@@ -18,14 +20,21 @@ function BurgerConstructor() {
     const ingredients = useSelector(selectBurgerConstructorItems);
     const orderNumber = useSelector(selectOrderNumber);
     const bun = useSelector(selectBurgerConstructorBun);
+    const user = useSelector(selectUser);
+    const navigate = useNavigate();
+
     // @ts-ignore
     const totalPrice = ingredients.reduce((partialSum, ingredient) => partialSum + ingredient.price, 0)
         + (bun ? bun.price * 2 : 0);
 
     const submitOrder = () => {
-        setOrderDetailsVisible(true);
-        // @ts-ignore
-        dispatch(postOrder([bun, ...ingredients.map(item => item._id), bun]));
+        if(!user.profile)
+            navigate('/login');
+        else {
+            setOrderDetailsVisible(true);
+            // @ts-ignore
+            dispatch(postOrder([bun, ...ingredients.map(item => item._id), bun]));
+        }
     }
 
     const [{isHover}, dropTarget] = useDrop({

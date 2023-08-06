@@ -4,6 +4,8 @@ import {CloseIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import ModalOverlay from "../modal-overlay/modal-overlay";
 import PropTypes from 'prop-types';
 
+
+
 function Modal(props: any) {
     function keyDownHandler(event: any) {
         event.keyCode === 27 && props.onClose();
@@ -14,7 +16,7 @@ function Modal(props: any) {
         return () => {
             document.removeEventListener("keydown", keyDownHandler);
         }
-    }, [])
+    }, [props.onClose])
 
 
     return (

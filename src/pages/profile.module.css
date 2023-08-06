@@ -1,0 +1,33 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 70vh;
+}
+
+.wrapperLeft {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 70vh;
+    width: 0%;
+    overflow: visible;
+    transform: translateX(-200px);
+}
+
+.wrapperLeft p{
+    justify-content: left;
+}
+
+.navlink {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.navlink.active {
+    text-decoration: none;
+    color: #fff;
+}

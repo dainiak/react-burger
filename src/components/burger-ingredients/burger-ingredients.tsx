@@ -5,14 +5,17 @@ import IngredientCard from '../ingredient-card/ingredient-card';
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import {useSelector, useDispatch, shallowEqual} from "react-redux";
-import {SET_CURRENT_INGREDIENT} from "../../services/actions/burger-ingredients";
+
 import {REMOVE_INGREDIENT} from "../../services/actions/burger-constructor";
 import {useDrop} from "react-dnd";
 import {selectBurgerIngredientsItems, selectCurrentIngredient} from "../../services/selectors/burger-ingredients";
 import {selectIngredientsCounts} from "../../services/selectors/burger-constructor";
+import {useNavigate, useLocation} from "react-router-dom";
 
 // @ts-ignore
 function BurgerIngredients() {
+    const navigate = useNavigate();
+    const location = useLocation();
     const ingredientCategories = [
         {name: "bun", header: "Булки", headerRef: React.createRef()},
         {name: "sauce", header: "Соусы", headerRef: React.createRef()},
@@ -32,11 +35,9 @@ function BurgerIngredients() {
     const [currentCategory, setCurrentCategory] = React.useState(ingredientCategories[0].name);
 
     const dispatch = useDispatch();
-    const setCurrentIngredient = (ingredient: any) => {
-        dispatch({type: SET_CURRENT_INGREDIENT, payload: ingredient})
+    const openIngredientModal = (ingredientId: any) => {
+        navigate(`/ingredients/${ingredientId}`, {replace: true, state: {background: location}});
     };
-
-    const currentIngredient = useSelector(selectCurrentIngredient);
 
     const setCategory = (name: any) => {
         setCurrentCategory(name);
@@ -72,15 +73,8 @@ function BurgerIngredients() {
     });
 
     // @ts-ignore
-    // @ts-ignore
     return (
         <React.Fragment>
-        {currentIngredient !== null &&
-            <Modal onClose={() => setCurrentIngredient(null)}>
-                <IngredientDetails ingredient={currentIngredient} />
-            </Modal>
-        }
-
         <div className={styles.mainWrapper} ref={dropTarget}>
             <p className="text text_type_main-large pt-10 pb-5">Соберите бургер</p>
 
@@ -115,7 +109,7 @@ function BurgerIngredients() {
                                                 // @ts-ignore
                                                 counts[item._id] || 0
                                             }
-                                            onClick={() => setCurrentIngredient(item)}
+                                            onClick={() => openIngredientModal(item._id)}
                                         />
                                     )
                                 }
@@ -131,3 +125,4 @@ function BurgerIngredients() {
 }
 
 export default BurgerIngredients;
+

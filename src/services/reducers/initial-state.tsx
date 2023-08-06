@@ -14,5 +14,10 @@ export const initialState = {
         isPosting: false,
         hasError: false
     },
-    currentIngredient: null
+    currentIngredient: null,
+    user: {
+        profile: null,
+        isLoading: false,
+        hasError: false
+    }
 };
