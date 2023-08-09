@@ -1,13 +1,13 @@
 import styles from "./reset-password.module.css";
 import {Button, Input} from "@ya.praktikum/react-developer-burger-ui-components";
-import React from "react";
+import React, {FunctionComponent} from "react";
 import {resetPasswordByApi} from "../utils/burger-api";
 import {useForm} from "../utils/useForm";
 import {ROUTE_LOGIN} from "../utils/routes";
 
 
-export const ResetPasswordPage = () => {
-    const {values, handleChange} = useForm({token: '', password: ''});
+export const ResetPasswordPage:FunctionComponent = () => {
+    const {values, handleChange} = useForm<{token:string; password: string}>({token: '', password: ''});
 
     const [passwordResetRequestSent, setPasswordResetRequestSent] = React.useState(false);
 

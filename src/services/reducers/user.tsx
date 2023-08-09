@@ -2,7 +2,6 @@ import {LOGIN, LOGIN_FAILED, LOGIN_SUCCESS, LOGOUT, REGISTER_NEW_USER, REGISTER_
 
 import {initialState} from "./initial-state";
 
-//@ts-ignore
 export const userReducer = (state: object = initialState.user, action: any) => {
     switch(action.type) {
         case LOGIN:

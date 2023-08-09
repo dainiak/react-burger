@@ -13,7 +13,6 @@ const root = ReactDOM.createRoot(
 );
 
 
-// @ts-ignore
 const store = configureStore({
     reducer: rootReducer,
     devTools: true

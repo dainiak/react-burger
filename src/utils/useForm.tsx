@@ -1,10 +1,9 @@
-import {useState} from "react";
+import {useState, ChangeEvent} from "react";
 
-// @ts-ignore
-export function useForm(inputValues) {
+export const useForm = <T extends Object>(inputValues: T) => {
     const [values, setValues] = useState(inputValues);
-    // @ts-ignore
-    const handleChange = (event) => {
+
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const {value, name} = event.target;
         setValues({...values, [name]: value});
     };

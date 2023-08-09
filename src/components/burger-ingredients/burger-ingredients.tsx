@@ -1,38 +1,40 @@
-import React, {SyntheticEvent} from 'react';
+import React, {FunctionComponent, SyntheticEvent} from 'react';
 import {Tab} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
 import IngredientCard from '../ingredient-card/ingredient-card';
-import Modal from "../modal/modal";
-import IngredientDetails from "../ingredient-details/ingredient-details";
 import {useSelector, useDispatch, shallowEqual} from "react-redux";
 
 import {REMOVE_INGREDIENT} from "../../services/actions/burger-constructor";
 import {useDrop} from "react-dnd";
-import {selectBurgerIngredientsItems, selectCurrentIngredient} from "../../services/selectors/burger-ingredients";
+import {selectBurgerIngredientsItems} from "../../services/selectors/burger-ingredients";
 import {selectIngredientsCounts} from "../../services/selectors/burger-constructor";
 import {useNavigate, useLocation} from "react-router-dom";
 
-// @ts-ignore
-function BurgerIngredients() {
+interface IIngredient {
+    _id: string;
+}
+
+
+const BurgerIngredients: FunctionComponent = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const ingredientCategories = [
-        {name: "bun", header: "Булки", headerRef: React.createRef()},
-        {name: "sauce", header: "Соусы", headerRef: React.createRef()},
-        {name: "main", header: "Начинки", headerRef: React.createRef()}
+        {name: "bun", header: "Булки", headerRef: React.createRef<HTMLParagraphElement>()},
+        {name: "sauce", header: "Соусы", headerRef: React.createRef<HTMLParagraphElement>()},
+        {name: "main", header: "Начинки", headerRef: React.createRef<HTMLParagraphElement>()}
     ];
 
-    const burgerIngredients = useSelector(selectBurgerIngredientsItems, shallowEqual);
-    const counts = useSelector(selectIngredientsCounts, shallowEqual);
+    const burgerIngredients: Array<IIngredient> = useSelector(selectBurgerIngredientsItems, shallowEqual);
+    const counts:{[key: string]: number} = useSelector(selectIngredientsCounts, shallowEqual);
 
-    const burgerIngredientsPerCategory = ingredientCategories.map((category: any) => {
+    const burgerIngredientsPerCategory = ingredientCategories.map((category) => {
         return {
             ...category,
             ingredients: burgerIngredients.filter((ingredient: any) => ingredient.type === category.name)
         };
     });
 
-    const [currentCategory, setCurrentCategory] = React.useState(ingredientCategories[0].name);
+    const [currentCategory, setCurrentCategory] = React.useState<string|null>(ingredientCategories[0].name);
 
     const dispatch = useDispatch();
     const openIngredientModal = (ingredientId: any) => {
@@ -52,27 +54,25 @@ function BurgerIngredients() {
         for (let category of ingredientCategories) {
 
             const distance = Math.abs(
-                // @ts-ignore
-                category.headerRef.current.getBoundingClientRect().top - e.currentTarget.getBoundingClientRect().top
+                (category.headerRef.current ? category.headerRef.current.getBoundingClientRect().top: 0)
+                -
+                e.currentTarget.getBoundingClientRect().top
             );
-            if (distance < bestDistance ) {
+            if (distance < bestDistance) {
                 relevantCategoryName = category.name;
                 bestDistance = distance;
             }
         }
-        // @ts-ignore
         setCurrentCategory(relevantCategoryName);
     }
 
     const [, dropTarget] = useDrop({
         accept: 'ingredientInConstructor',
-        drop(item) {
-            // @ts-ignore
+        drop(item:{index: any}) {
             dispatch({type: REMOVE_INGREDIENT, payload: {index: item.index}});
         }
     });
 
-    // @ts-ignore
     return (
         <React.Fragment>
         <div className={styles.mainWrapper} ref={dropTarget}>
@@ -100,13 +100,12 @@ function BurgerIngredients() {
                             <p className="text text_type_main-medium" id={`header_${category.name}`} ref={category.headerRef}>{category.header}</p>
                             <div className={styles.ingredientCardGallery}>
                                 {
-                                    category.ingredients.map((item: any) =>
+                                    category.ingredients.map((item: IIngredient) =>
                                         <IngredientCard
                                             key={item._id}
                                             ingredientItem={item}
 
                                             count={
-                                                // @ts-ignore
                                                 counts[item._id] || 0
                                             }
                                             onClick={() => openIngredientModal(item._id)}

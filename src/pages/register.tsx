@@ -1,13 +1,13 @@
 import styles from "./register.module.css";
 import {Button, EmailInput, Input} from "@ya.praktikum/react-developer-burger-ui-components";
-import React from "react";
+import React, {FunctionComponent} from "react";
 import {registerUser} from "../services/actions/user";
 import {useDispatch, useSelector} from "react-redux";
 import {selectUser} from "../services/selectors/user";
 import {useForm} from "../utils/useForm";
 import {ROUTE_LOGIN} from "../utils/routes";
 
-export const RegisterPage = () => {
+export const RegisterPage:FunctionComponent = () => {
     const {values, handleChange} = useForm({name: '', email: '', password: ''});
     const userInfo = useSelector(selectUser);
 
@@ -15,7 +15,6 @@ export const RegisterPage = () => {
 
     const onSubmit = (e: any) => {
         e.preventDefault();
-        // @ts-ignore
         dispatch(registerUser(values.email, values.password, values.name));
     }
 
@@ -31,7 +30,6 @@ export const RegisterPage = () => {
                 onChange={handleChange}
                 value={values.name}
                 name={'name'}
-                // icon={"ShowIcon"}
                 placeholder={"Имя"}
                 hidden={false}
                 noValidate={true}

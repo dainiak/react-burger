@@ -1,6 +1,6 @@
 import styles from './profile.module.css';
 import { Input } from "@ya.praktikum/react-developer-burger-ui-components";
-import React, {useEffect} from "react";
+import React, {FunctionComponent, useEffect} from "react";
 import {NavLink} from "react-router-dom";
 import {updateUserInfoByApi} from "../utils/burger-api";
 import {useSelector} from "react-redux";
@@ -9,7 +9,7 @@ import {ROUTE_LOGOUT, ROUTE_ORDERS, ROUTE_PROFILE} from "../utils/routes";
 import {loadUserProfile} from "../services/actions/user";
 import {useDispatch} from "react-redux";
 
-export const ProfilePage = () => {
+export const ProfilePage:FunctionComponent = () => {
     const [email, setEmail] = React.useState('');
     const [isEditingEmail, setIsEditingEmail] = React.useState(false);
     const [password, setPassword] = React.useState('');
@@ -40,7 +40,6 @@ export const ProfilePage = () => {
         if(isEditingName) {
             setIsEditingName(false);
             updateUserInfoByApi({name}).then(() => {
-                // @ts-ignore
                 dispatch(loadUserProfile());
             });
         }
@@ -52,7 +51,6 @@ export const ProfilePage = () => {
         if(isEditingEmail) {
             setIsEditingEmail(false);
             updateUserInfoByApi({email}).then(() => {
-                // @ts-ignore
                 dispatch(loadUserProfile());
             });
         }
@@ -64,7 +62,6 @@ export const ProfilePage = () => {
         if(isEditingPassword) {
             setIsEditingPassword(false);
             updateUserInfoByApi({password}).then(() => {
-                // @ts-ignore
                 dispatch(loadUserProfile());
             });
         }

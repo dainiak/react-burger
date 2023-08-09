@@ -1,4 +1,4 @@
-import React from "react";
+import React, {FunctionComponent} from "react";
 import {useDispatch, useSelector} from "react-redux";
 
 import BurgerIngredients from "../components/burger-ingredients/burger-ingredients";
@@ -7,13 +7,11 @@ import {loadIngredients} from "../services/actions/burger-ingredients";
 import {selectBurgerIngredients} from "../services/selectors/burger-ingredients";
 
 
-export const MainPage = () => {
+export const MainPage:FunctionComponent = () => {
     const dispatch = useDispatch();
 
-    // @ts-ignore
     React.useEffect(() => dispatch(loadIngredients()), [dispatch]);
 
-    // @ts-ignore
     const { isLoading, hasError } = useSelector(selectBurgerIngredients);
 
     return (<>

@@ -1,11 +1,16 @@
-import React from 'react';
+import React, {FunctionComponent} from 'react';
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './ingredient-card.module.css';
-import PropTypes from 'prop-types';
 import {useDrag} from "react-dnd";
-import {ingredientPropTypes} from "../../utils/prop-types";
 
-function IngredientCard(props: any) {
+
+type TIngredientCardProps = {
+    ingredientItem: any;
+    count: number;
+    onClick: () => void;
+}
+
+const IngredientCard:FunctionComponent<TIngredientCardProps> = (props) => {
     const text = props.ingredientItem.name;
     const price = props.ingredientItem.price;
     const thumbnail = props.ingredientItem.image;
@@ -32,10 +37,5 @@ function IngredientCard(props: any) {
     )
 }
 
-IngredientCard.propTypes = {
-    ingredientItem: ingredientPropTypes,
-    count: PropTypes.number.isRequired,
-    onClick: PropTypes.func.isRequired,
-}
 
 export default IngredientCard;

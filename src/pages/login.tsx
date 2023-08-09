@@ -1,6 +1,6 @@
 import styles from "./login.module.css";
 import {Button, EmailInput, Input} from "@ya.praktikum/react-developer-burger-ui-components";
-import React from "react";
+import React, {FunctionComponent} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {selectUser} from "../services/selectors/user";
 import {Navigate} from "react-router-dom";
@@ -10,19 +10,17 @@ import {useForm} from "../utils/useForm";
 import {ROUTE_FORGOT_PASSWORD, ROUTE_REGISTER} from "../utils/routes";
 
 
-export const LoginPage = () => {
+export const LoginPage:FunctionComponent = () => {
     const {values, handleChange} = useForm({email: '', password: ''});
     const userInfo = useSelector(selectUser);
     const dispatch = useDispatch();
 
     const onSubmit = (e: any) => {
         e.preventDefault();
-        // @ts-ignore
         dispatch(loginUser(values.email, values.password));
     }
 
     if(localStorage.getItem('refreshToken')) {
-        // @ts-ignore
         dispatch(loadUserProfile());
     }
 
@@ -50,7 +48,6 @@ export const LoginPage = () => {
                 onChange={handleChange}
                 value={values.password}
                 name={'password'}
-                // icon={"ShowIcon"}
                 placeholder={"Пароль"}
                 hidden={false}
                 noValidate={true}

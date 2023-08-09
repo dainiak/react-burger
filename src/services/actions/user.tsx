@@ -10,7 +10,7 @@ export const REGISTER_NEW_USER = 'REGISTER_NEW_USER';
 export const REGISTER_NEW_USER_FAILED = 'REGISTER_NEW_USER_FAILED';
 
 
-export const loginUser = (email: any, password: any) => {
+export const loginUser:Function = (email: any, password: any) => {
     return (dispatch :any) => {
         dispatch({ type: LOGIN });
 
@@ -32,7 +32,7 @@ export const loginUser = (email: any, password: any) => {
     }
 }
 
-export const registerUser = (email: any, password: any, name: any) => {
+export const registerUser:Function = (email: any, password: any, name: any) => {
     return (dispatch :any) => {
         dispatch({ type: REGISTER_NEW_USER });
 
@@ -54,7 +54,7 @@ export const registerUser = (email: any, password: any, name: any) => {
     }
 }
 
-export const logoutUser = () => {
+export const logoutUser:Function = () => {
     const token = localStorage.getItem('refreshToken');
     deleteCookie('token');
     localStorage.removeItem('refreshToken');
@@ -69,7 +69,7 @@ export const logoutUser = () => {
     }
 }
 
-export const loadUserProfile = () => {
+export const loadUserProfile:Function = () => {
     return (dispatch :any) => {
         getUserInfoByApi().then((data) => {
             data.success && dispatch({

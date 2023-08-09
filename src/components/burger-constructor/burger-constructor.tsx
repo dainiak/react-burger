@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {FunctionComponent} from 'react';
 import {Button, ConstructorElement, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-constructor.module.css';
 import OrderDetails from "../order-details/order-details";
@@ -14,17 +14,21 @@ import {postOrder} from "../../services/actions/order";
 import {selectUser} from "../../services/selectors/user";
 import {useNavigate} from "react-router-dom";
 
-function BurgerConstructor() {
+interface IIngredient {
+    _id: string;
+    price: number;
+}
+
+const BurgerConstructor: FunctionComponent = () => {
     const [orderDetailsVisible, setOrderDetailsVisible] = React.useState(false);
     const dispatch = useDispatch();
-    const ingredients = useSelector(selectBurgerConstructorItems);
+    const ingredients:Array<IIngredient> = useSelector(selectBurgerConstructorItems);
     const orderNumber = useSelector(selectOrderNumber);
     const bun = useSelector(selectBurgerConstructorBun);
     const user = useSelector(selectUser);
     const navigate = useNavigate();
 
-    // @ts-ignore
-    const totalPrice = ingredients.reduce((partialSum, ingredient) => partialSum + ingredient.price, 0)
+    const totalPrice: number = ingredients.reduce((partialSum: number, ingredient: IIngredient) => partialSum + ingredient.price, 0)
         + (bun ? bun.price * 2 : 0);
 
     const submitOrder = () => {
@@ -32,7 +36,6 @@ function BurgerConstructor() {
             navigate('/login');
         else {
             setOrderDetailsVisible(true);
-            // @ts-ignore
             dispatch(postOrder([bun, ...ingredients.map(item => item._id), bun]));
         }
     }

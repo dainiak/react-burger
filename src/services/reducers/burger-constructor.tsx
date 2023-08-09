@@ -1,6 +1,6 @@
 import {ADD_INGREDIENT, REMOVE_INGREDIENT, REORDER_INGREDIENTS} from "../actions/burger-constructor";
 import {initialState} from "./initial-state";
-// @ts-ignore
+
 import { v4 as randomUUID } from 'uuid';
 
 export const burgerConstructor = (state = initialState.burgerConstructor, action: any) => {

@@ -2,8 +2,8 @@ import {getCookie, setCookie} from './cookies';
 
 const NORMA_API_ENDPOINT = 'https://norma.nomoreparties.space/api'
 
-const checkApiReponse = (res) => {
-    return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
+const checkApiResponse = (res: Response) => {
+    return res.ok ? res.json() : res.json().then((err: PromiseRejectionEvent) => Promise.reject(err));
 };
 
 const refreshTokens = async () => {
@@ -16,16 +16,24 @@ const refreshTokens = async () => {
             body:  JSON.stringify({token: localStorage.getItem("refreshToken")})
         }
     ).then(
-        checkApiReponse
+        checkApiResponse
     );
 }
 
-const fetchWithRefresh = async (url, options) => {
+interface IFetchOptions {
+    method: string,
+    headers: {
+        'Content-Type': string,
+        authorization?: string
+    },
+    body?: string
+}
+
+const fetchWithRefresh = async (url: string, options:IFetchOptions) => {
     try {
         options.headers.authorization = getCookie("token");
-        const res =  await fetch(url, options);
-        return res;
-    } catch (err) {
+        return await fetch(url, options);
+    } catch (err: any) {
         if (err.message === "jwt expired") {
             const refreshData = await refreshTokens();
             if (!refreshData.success) {
@@ -34,7 +42,7 @@ const fetchWithRefresh = async (url, options) => {
             localStorage.setItem("refreshToken", refreshData.refreshToken);
             setCookie("token", refreshData.accessToken);
             options.headers.authorization = refreshData.accessToken;
-            return fetch(url, options).then(checkApiReponse);
+            return fetch(url, options).then(checkApiResponse);
         } else {
             return Promise.reject(err);
         }
@@ -45,11 +53,11 @@ export const getIngredientsByApi = async () => {
     return fetch(
         `${NORMA_API_ENDPOINT}/ingredients`
     ).then(
-        checkApiReponse
+        checkApiResponse
     );
 }
 
-export const postOrderByApi = async (ingredients) => {
+export const postOrderByApi = async (ingredients: Object) => {
     return fetchWithRefresh(
         `${NORMA_API_ENDPOINT}/orders`, {
             method: 'POST',
@@ -59,11 +67,11 @@ export const postOrderByApi = async (ingredients) => {
             body:  JSON.stringify({ingredients: ingredients})
         }
     ).then(
-        checkApiReponse
+        checkApiResponse
     );
 }
 
-export const sendPasswordResetEmailByApi = async (email) => {
+export const sendPasswordResetEmailByApi = async (email: string) => {
     return fetch(
         `${NORMA_API_ENDPOINT}/password-reset`, {
             method: 'POST',
@@ -73,11 +81,11 @@ export const sendPasswordResetEmailByApi = async (email) => {
             body:  JSON.stringify({email})
         }
     ).then(
-        checkApiReponse
+        checkApiResponse
     );
 }
 
-export const resetPasswordByApi = async (password, token) => {
+export const resetPasswordByApi = async (password: string, token: string) => {
     return fetch(
         `${NORMA_API_ENDPOINT}/password-reset/reset`, {
             method: 'POST',
@@ -87,11 +95,11 @@ export const resetPasswordByApi = async (password, token) => {
             body:  JSON.stringify({password, token})
         }
     ).then(
-        checkApiReponse
+        checkApiResponse
     );
 }
 
-export const registerUserByApi = async (email, password, name) => {
+export const registerUserByApi = async (email: string, password: string, name: string) => {
     return fetch(
         `${NORMA_API_ENDPOINT}/auth/register`, {
             method: 'POST',
@@ -105,11 +113,11 @@ export const registerUserByApi = async (email, password, name) => {
             })
         }
     ).then(
-        checkApiReponse
+        checkApiResponse
     );
 }
 
-export const loginUserByApi = async (email, password) => {
+export const loginUserByApi = async (email: string, password: string) => {
     return fetch(
         `${NORMA_API_ENDPOINT}/auth/login`, {
             method: 'POST',
@@ -122,11 +130,11 @@ export const loginUserByApi = async (email, password) => {
             })
         }
     ).then(
-        checkApiReponse
+        checkApiResponse
     );
 }
 
-export const logoutUserByApi = async (token) => {
+export const logoutUserByApi = async (token: string) => {
     try {
         fetch(
             `${NORMA_API_ENDPOINT}/auth/logout`, {
@@ -137,7 +145,7 @@ export const logoutUserByApi = async (token) => {
                 body: JSON.stringify({token})
             }
         ).then(
-            checkApiReponse
+            checkApiResponse
         )
     }
     catch (err) {
@@ -154,11 +162,11 @@ export const getUserInfoByApi = async () => {
             }
         }
     ).then(
-        checkApiReponse
+        checkApiResponse
     );
 }
 
-export const updateUserInfoByApi = async (values) => {
+export const updateUserInfoByApi = async (values: Object) => {
     return fetchWithRefresh(
         `${NORMA_API_ENDPOINT}/auth/user`, {
             method: 'PATCH',
@@ -168,7 +176,7 @@ export const updateUserInfoByApi = async (values) => {
             body:  JSON.stringify(values)
         }
     ).then(
-        checkApiReponse
+        checkApiResponse
     );
 }
 

@@ -1,12 +1,10 @@
-import React from "react";
+import React, {FunctionComponent} from "react";
 import styles from './ingredient-details.module.css';
 
-import {ingredientPropTypes} from "../../utils/prop-types";
 import {useSelector} from "react-redux";
 import {selectBurgerIngredientsItems} from "../../services/selectors/burger-ingredients";
-import PropTypes from "prop-types";
 
-function IngredientDetails(props: any) {
+const IngredientDetails:FunctionComponent<{ingredientId: string|undefined}> = (props) => {
     const ingredients = useSelector(selectBurgerIngredientsItems);
     const ingredient = ingredients.find((ingredient: any) => ingredient._id === props.ingredientId);
     if(!ingredient) {
@@ -43,10 +41,6 @@ function IngredientDetails(props: any) {
             </div>
         </React.Fragment>
     )
-}
-
-IngredientDetails.propTypes = {
-    ingredientId: PropTypes.string
 }
 
 export default IngredientDetails;
