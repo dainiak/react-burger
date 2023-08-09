@@ -5,7 +5,7 @@ export const LOAD_INGREDIENTS_SUCCESS = 'LOAD_INGREDIENTS_SUCCESS';
 export const LOAD_INGREDIENTS_FAILED = 'LOAD_INGREDIENTS_FAILED';
 
 export const loadIngredients:Function = () => {
-    return (dispatch :any) => {
+    return (dispatch: Function) => {
         dispatch({ type: LOAD_INGREDIENTS });
 
         getIngredientsByApi(

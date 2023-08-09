@@ -1,17 +1,16 @@
 import {getUserInfoByApi, loginUserByApi, logoutUserByApi, registerUserByApi,} from "../../utils/burger-api";
 import {deleteCookie, setCookie} from "../../utils/cookies";
+
 export const LOGIN = 'LOGIN';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAILED = 'LOGIN_FAILED';
-
 export const LOGOUT = 'LOGOUT';
-
 export const REGISTER_NEW_USER = 'REGISTER_NEW_USER';
 export const REGISTER_NEW_USER_FAILED = 'REGISTER_NEW_USER_FAILED';
 
 
 export const loginUser:Function = (email: any, password: any) => {
-    return (dispatch :any) => {
+    return (dispatch: Function) => {
         dispatch({ type: LOGIN });
 
         loginUserByApi(
@@ -32,8 +31,8 @@ export const loginUser:Function = (email: any, password: any) => {
     }
 }
 
-export const registerUser:Function = (email: any, password: any, name: any) => {
-    return (dispatch :any) => {
+export const registerUser:Function = (email: string, password: string, name: string) => {
+    return (dispatch: Function) => {
         dispatch({ type: REGISTER_NEW_USER });
 
         registerUserByApi(
@@ -59,18 +58,18 @@ export const logoutUser:Function = () => {
     deleteCookie('token');
     localStorage.removeItem('refreshToken');
 
-    if(!token) return (dispatch :any) => {
+    if(!token) return (dispatch: Function) => {
         dispatch({ type: LOGOUT });
     }
-    return (dispatch :any) => {
+    return (dispatch: Function) => {
         logoutUserByApi(token).finally(() => {
             dispatch({ type: LOGOUT });
         });
     }
 }
 
-export const loadUserProfile:Function = () => {
-    return (dispatch :any) => {
+export const loadUserProfile: Function = () => {
+    return (dispatch: Function) => {
         getUserInfoByApi().then((data) => {
             data.success && dispatch({
                 type: LOGIN_SUCCESS,

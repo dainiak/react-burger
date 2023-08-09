@@ -25,7 +25,7 @@ export const ProfilePage:FunctionComponent = () => {
     useEffect(() => {
         setName(user.profile.name);
         setEmail(user.profile.email);
-    }, []);
+    }, [user.profile.name, user.profile.email]);
 
     const onNameChange = (e: any) => {
         isEditingName && setName(e.target.value);

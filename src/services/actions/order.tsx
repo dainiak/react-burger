@@ -5,7 +5,7 @@ export const POST_ORDER_SUCCESS = 'POST_ORDER_SUCCESS';
 export const POST_ORDER_FAILED = 'POST_ORDER_FAILED';
 
 export const postOrder:Function = (ingredients: any) => {
-    return (dispatch :any) => {
+    return (dispatch: Function) => {
         dispatch({ type: POST_ORDER });
 
         postOrderByApi(

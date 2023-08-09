@@ -1,8 +1,9 @@
 import {LOGIN, LOGIN_FAILED, LOGIN_SUCCESS, LOGOUT, REGISTER_NEW_USER, REGISTER_NEW_USER_FAILED} from "../actions/user";
 
 import {initialState} from "./initial-state";
+import {AnyAction} from "redux";
 
-export const userReducer = (state: object = initialState.user, action: any) => {
+export const userReducer = (state: object = initialState.user, action: AnyAction) => {
     switch(action.type) {
         case LOGIN:
             return {

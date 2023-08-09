@@ -4,16 +4,16 @@ import {CloseIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import ModalOverlay from "../modal-overlay/modal-overlay";
 
 const Modal: FunctionComponent<{onClose: ()=>void, onClick?: MouseEventHandler<HTMLElement>, children?:ReactNode}> = (props) => {
-    function keyDownHandler(event: any) {
-        event.keyCode === 27 && props.onClose();
-    }
-
     React.useEffect(() => {
+        function keyDownHandler(event: any) {
+            event.keyCode === 27 && props.onClose();
+        }
+
         document.addEventListener("keydown", keyDownHandler);
         return () => {
             document.removeEventListener("keydown", keyDownHandler);
         }
-    }, [props.onClose])
+    }, [props])
 
 
     return (

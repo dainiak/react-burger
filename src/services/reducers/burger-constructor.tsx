@@ -2,8 +2,9 @@ import {ADD_INGREDIENT, REMOVE_INGREDIENT, REORDER_INGREDIENTS} from "../actions
 import {initialState} from "./initial-state";
 
 import { v4 as randomUUID } from 'uuid';
+import {AnyAction} from "redux";
 
-export const burgerConstructor = (state = initialState.burgerConstructor, action: any) => {
+export const burgerConstructor = (state = initialState.burgerConstructor, action: AnyAction) => {
     switch(action.type) {
         case ADD_INGREDIENT:
             if(action.payload.type === 'bun') {
