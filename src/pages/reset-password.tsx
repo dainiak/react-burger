@@ -4,6 +4,7 @@ import React, {FunctionComponent} from "react";
 import {resetPasswordByApi} from "../utils/burger-api";
 import {useForm} from "../utils/useForm";
 import {ROUTE_LOGIN} from "../utils/routes";
+import {FormEvent} from "react";
 
 
 export const ResetPasswordPage:FunctionComponent = () => {
@@ -11,7 +12,7 @@ export const ResetPasswordPage:FunctionComponent = () => {
 
     const [passwordResetRequestSent, setPasswordResetRequestSent] = React.useState(false);
 
-    const onSubmit = (e: any) => {
+    const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         resetPasswordByApi(values.password, values.token).then(() => {
             setPasswordResetRequestSent(true);

@@ -1,6 +1,6 @@
 import styles from "./login.module.css";
 import {Button, EmailInput, Input} from "@ya.praktikum/react-developer-burger-ui-components";
-import React, {FunctionComponent} from "react";
+import React, {FunctionComponent, FormEvent} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {selectUser} from "../services/selectors/user";
 import {Navigate} from "react-router-dom";
@@ -15,7 +15,7 @@ export const LoginPage:FunctionComponent = () => {
     const userInfo = useSelector(selectUser);
     const dispatch = useDispatch();
 
-    const onSubmit = (e: any) => {
+    const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         dispatch(loginUser(values.email, values.password));
     }

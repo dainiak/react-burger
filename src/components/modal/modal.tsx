@@ -1,17 +1,17 @@
-import React, {FunctionComponent, MouseEventHandler, ReactNode} from "react";
+import React, {FunctionComponent, ReactNode} from "react";
 import styles from './modal.module.css';
 import {CloseIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import ModalOverlay from "../modal-overlay/modal-overlay";
 
-const Modal: FunctionComponent<{onClose: ()=>void, onClick?: MouseEventHandler<HTMLElement>, children?:ReactNode}> = (props) => {
+const Modal: FunctionComponent<{onClose: ()=>void, children?:ReactNode}> = (props) => {
     React.useEffect(() => {
-        function keyDownHandler(event: any) {
-            event.keyCode === 27 && props.onClose();
+        function keyDownHandler(event: KeyboardEvent) {
+            event.key === 'Escape' && props.onClose();
         }
 
-        document.addEventListener("keydown", keyDownHandler);
+        document.addEventListener('keydown', keyDownHandler);
         return () => {
-            document.removeEventListener("keydown", keyDownHandler);
+            document.removeEventListener('keydown', keyDownHandler);
         }
     }, [props])
 

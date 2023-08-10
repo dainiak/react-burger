@@ -4,7 +4,7 @@ export const POST_ORDER = 'POST_ORDER';
 export const POST_ORDER_SUCCESS = 'POST_ORDER_SUCCESS';
 export const POST_ORDER_FAILED = 'POST_ORDER_FAILED';
 
-export const postOrder:Function = (ingredients: any) => {
+export const postOrder:Function = (ingredients: string[]) => {
     return (dispatch: Function) => {
         dispatch({ type: POST_ORDER });
 

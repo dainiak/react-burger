@@ -1,6 +1,6 @@
 import styles from './profile.module.css';
 import { Input } from "@ya.praktikum/react-developer-burger-ui-components";
-import React, {FunctionComponent, useEffect} from "react";
+import React, {ChangeEvent, FunctionComponent, useEffect} from "react";
 import {NavLink} from "react-router-dom";
 import {updateUserInfoByApi} from "../utils/burger-api";
 import {useSelector} from "react-redux";
@@ -27,13 +27,13 @@ export const ProfilePage:FunctionComponent = () => {
         setEmail(user.profile.email);
     }, [user.profile.name, user.profile.email]);
 
-    const onNameChange = (e: any) => {
+    const onNameChange = (e: ChangeEvent<HTMLInputElement>) => {
         isEditingName && setName(e.target.value);
     };
-    const onEmailChange = (e: any) => {
+    const onEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
         isEditingEmail && setEmail(e.target.value);
     }
-    const onPasswordChange = (e: any) => {
+    const onPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
         isEditingPassword && setPassword(e.target.value);
     }
     const onNameIconClick = () => {

@@ -1,23 +1,23 @@
 import React from 'react';
-import './App.css';
+import './app.css';
 import { Routes, Route, useLocation } from 'react-router-dom';
 
-import AppHeader from './components/app-header/app-header';
+import AppHeader from '../app-header/app-header';
 
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { MainPage } from "./pages/main-page";
-import { Page404 } from "./pages/page-404";
-import { IngredientPage } from "./pages/ingredient";
-import { LoginPage } from "./pages/login";
-import { LogoutPage } from "./pages/logout";
-import { RegisterPage } from "./pages/register";
-import { ForgotPasswordPage } from "./pages/forgot-password";
-import { ResetPasswordPage } from "./pages/reset-password";
-import { ProfilePage } from "./pages/profile";
-import { IngredientDetailsModal } from "./components/ingredient-details-modal/ingredient-details-modal";
+import { MainPage } from "../../pages/main-page";
+import { Page404 } from "../../pages/page-404";
+import { IngredientPage } from "../../pages/ingredient";
+import { LoginPage } from "../../pages/login";
+import { LogoutPage } from "../../pages/logout";
+import { RegisterPage } from "../../pages/register";
+import { ForgotPasswordPage } from "../../pages/forgot-password";
+import { ResetPasswordPage } from "../../pages/reset-password";
+import { ProfilePage } from "../../pages/profile";
+import { IngredientDetailsModal } from "../ingredient-details-modal/ingredient-details-modal";
 
-import {AuthOnly, NonAuthOnly} from "./components/protected-route-element/protected-route-element";
+import {AuthOnly, NonAuthOnly} from "../protected-route-element/protected-route-element";
 import {
     ROUTE_FORGOT_PASSWORD, ROUTE_INGREDIENTS,
     ROUTE_LOGIN,
@@ -25,11 +25,16 @@ import {
     ROUTE_REGISTER,
     ROUTE_RESET_PASSWORD,
     ROUTE_ROOT
-} from "./utils/routes";
+} from "../../utils/routes";
+import {useDispatch} from "react-redux";
+import {loadIngredients} from "../../services/actions/burger-ingredients";
 
 function App() {
     const location = useLocation();
     const background = location.state && location.state.background;
+
+    const dispatch = useDispatch();
+    React.useEffect(() => dispatch(loadIngredients()), [dispatch]);
 
     return (
         <div className="App">

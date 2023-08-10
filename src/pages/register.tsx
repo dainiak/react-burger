@@ -1,6 +1,6 @@
 import styles from "./register.module.css";
 import {Button, EmailInput, Input} from "@ya.praktikum/react-developer-burger-ui-components";
-import React, {FunctionComponent} from "react";
+import React, {FunctionComponent, FormEvent} from "react";
 import {registerUser} from "../services/actions/user";
 import {useDispatch, useSelector} from "react-redux";
 import {selectUser} from "../services/selectors/user";
@@ -13,7 +13,7 @@ export const RegisterPage:FunctionComponent = () => {
 
     const dispatch = useDispatch();
 
-    const onSubmit = (e: any) => {
+    const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         dispatch(registerUser(values.email, values.password, values.name));
     }

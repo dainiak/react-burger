@@ -1,4 +1,4 @@
-export interface IIngredient {
+export interface IBurgerIngredient {
     _id: string;
     name: string;
     type: "bun"|"main"|"sauce";
@@ -10,4 +10,8 @@ export interface IIngredient {
     image: string;
     image_large: string;
     image_mobile: string;
+}
+
+export interface IBurgerIngredientWithUUID extends IBurgerIngredient {
+    uuid: string;
 }

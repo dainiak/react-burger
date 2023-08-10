@@ -2,10 +2,11 @@ import React, {FunctionComponent} from 'react';
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './ingredient-card.module.css';
 import {useDrag} from "react-dnd";
+import {IBurgerIngredient} from "../../declarations/burger-ingredients";
 
 
 type TIngredientCardProps = {
-    ingredientItem: any;
+    ingredientItem: IBurgerIngredient;
     count: number;
     onClick: () => void;
 }

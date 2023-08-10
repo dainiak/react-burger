@@ -4,16 +4,11 @@ import styles from './ingredient.module.css';
 
 import {useParams} from "react-router-dom";
 import React, {FunctionComponent} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {loadIngredients} from "../services/actions/burger-ingredients";
+import {useSelector} from "react-redux";
 import {selectBurgerIngredients} from "../services/selectors/burger-ingredients";
 
 
 export const IngredientPage:FunctionComponent = () => {
-    const dispatch = useDispatch();
-
-    React.useEffect(() => dispatch(loadIngredients()), [dispatch]);
-
     const { isLoading, hasError } = useSelector(selectBurgerIngredients);
     const { id } = useParams<{ id: string }>();
 

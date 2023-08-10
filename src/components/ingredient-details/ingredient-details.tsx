@@ -6,7 +6,7 @@ import {selectBurgerIngredientsItems} from "../../services/selectors/burger-ingr
 
 const IngredientDetails:FunctionComponent<{ingredientId: string|undefined}> = (props) => {
     const ingredients = useSelector(selectBurgerIngredientsItems);
-    const ingredient = ingredients.find((ingredient: any) => ingredient._id === props.ingredientId);
+    const ingredient = ingredients.find((ingredient) => ingredient._id === props.ingredientId);
     if(!ingredient) {
         return (<div className={styles.wrapper}><p>Ингредиент не найден</p></div>);
     }
@@ -14,7 +14,7 @@ const IngredientDetails:FunctionComponent<{ingredientId: string|undefined}> = (p
     const name = ingredient.name;
     const image = ingredient.image;
 
-    const nutritionFacts = [
+    const nutritionFacts: {name: string; value: number}[] = [
         {name: "Калории, ккал", value: ingredient.calories},
         {name: "Белки, г", value: ingredient.proteins},
         {name: "Жиры, г", value: ingredient.fat},
@@ -30,7 +30,7 @@ const IngredientDetails:FunctionComponent<{ingredientId: string|undefined}> = (p
                 <p className="text text_type_main-medium pt-4 pb-8">{name}</p>
                 <div className={styles.nutritionFacts}>
                     {
-                        nutritionFacts.map((fact: any) => (
+                        nutritionFacts.map((fact) => (
                             <div key={fact.name} className={`text text_type_main-small text_color_inactive ${styles.nutritionFactCard}`}>
                                 {fact.name}
                                 <div className="text text_type_digits-small text_color_inactive">{fact.value}</div>

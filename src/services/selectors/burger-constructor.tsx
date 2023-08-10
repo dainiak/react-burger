@@ -1,15 +1,7 @@
-export const selectBurgerConstructorItems = (store: any) => store.burgerConstructor.items;
-export const selectBurgerConstructorBun = (store: any) => store.burgerConstructor.bun;
+import {IStore} from "../../declarations/store";
 
-interface IBurgerIngredient {
-    _id: string
-}
-interface IStore {
-    burgerConstructor: {
-        bun: IBurgerIngredient,
-        items: IBurgerIngredient[]
-    }
-}
+export const selectBurgerConstructorItems = (store: IStore) => store.burgerConstructor.items;
+export const selectBurgerConstructorBun = (store: IStore) => store.burgerConstructor.bun;
 
 export const selectIngredientsCounts = (store: IStore) => {
     let counts:{[key:string]: number} = {};

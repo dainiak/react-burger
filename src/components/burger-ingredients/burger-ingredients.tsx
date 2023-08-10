@@ -9,10 +9,7 @@ import {useDrop} from "react-dnd";
 import {selectBurgerIngredientsItems} from "../../services/selectors/burger-ingredients";
 import {selectIngredientsCounts} from "../../services/selectors/burger-constructor";
 import {useNavigate, useLocation} from "react-router-dom";
-
-interface IIngredient {
-    _id: string;
-}
+import {IBurgerIngredient} from "../../declarations/burger-ingredients";
 
 
 const BurgerIngredients: FunctionComponent = () => {
@@ -24,24 +21,24 @@ const BurgerIngredients: FunctionComponent = () => {
         {name: "main", header: "Начинки", headerRef: React.createRef<HTMLParagraphElement>()}
     ];
 
-    const burgerIngredients: Array<IIngredient> = useSelector(selectBurgerIngredientsItems, shallowEqual);
+    const burgerIngredients: Array<IBurgerIngredient> = useSelector(selectBurgerIngredientsItems, shallowEqual);
     const counts:{[key: string]: number} = useSelector(selectIngredientsCounts, shallowEqual);
 
     const burgerIngredientsPerCategory = ingredientCategories.map((category) => {
         return {
             ...category,
-            ingredients: burgerIngredients.filter((ingredient: any) => ingredient.type === category.name)
+            ingredients: burgerIngredients.filter((ingredient) => ingredient.type === category.name)
         };
     });
 
     const [currentCategory, setCurrentCategory] = React.useState<string|null>(ingredientCategories[0].name);
 
     const dispatch = useDispatch();
-    const openIngredientModal = (ingredientId: any) => {
+    const openIngredientModal = (ingredientId: string) => {
         navigate(`/ingredients/${ingredientId}`, {replace: true, state: {background: location}});
     };
 
-    const setCategory = (name: any) => {
+    const setCategory = (name: string) => {
         setCurrentCategory(name);
         const element = document.getElementById(`header_${name}`);
         if (element)
@@ -68,7 +65,7 @@ const BurgerIngredients: FunctionComponent = () => {
 
     const [, dropTarget] = useDrop({
         accept: 'ingredientInConstructor',
-        drop(item:{index: any}) {
+        drop(item:{index: string}) {
             dispatch({type: REMOVE_INGREDIENT, payload: {index: item.index}});
         }
     });
@@ -80,7 +77,7 @@ const BurgerIngredients: FunctionComponent = () => {
 
             <div className={styles.tabWrapper}>
                 {
-                    burgerIngredientsPerCategory.map((category: any) => (
+                    burgerIngredientsPerCategory.map((category) => (
                         <Tab
                             value={category.name}
                             active={currentCategory === category.name}
@@ -95,12 +92,12 @@ const BurgerIngredients: FunctionComponent = () => {
 
             <div className={`custom-scroll ${styles.catalogWrapper}`} onScroll={updateActiveTab}>
                 {
-                    burgerIngredientsPerCategory.map((category: any) => (
+                    burgerIngredientsPerCategory.map((category) => (
                         <div className="pt-10" key={category.name}>
                             <p className="text text_type_main-medium" id={`header_${category.name}`} ref={category.headerRef}>{category.header}</p>
                             <div className={styles.ingredientCardGallery}>
                                 {
-                                    category.ingredients.map((item: IIngredient) =>
+                                    category.ingredients.map((item) =>
                                         <IngredientCard
                                             key={item._id}
                                             ingredientItem={item}

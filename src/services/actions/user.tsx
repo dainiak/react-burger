@@ -9,7 +9,7 @@ export const REGISTER_NEW_USER = 'REGISTER_NEW_USER';
 export const REGISTER_NEW_USER_FAILED = 'REGISTER_NEW_USER_FAILED';
 
 
-export const loginUser:Function = (email: any, password: any) => {
+export const loginUser:Function = (email: string, password: string) => {
     return (dispatch: Function) => {
         dispatch({ type: LOGIN });
 

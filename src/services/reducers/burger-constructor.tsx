@@ -3,8 +3,9 @@ import {initialState} from "./initial-state";
 
 import { v4 as randomUUID } from 'uuid';
 import {AnyAction} from "redux";
+import {IBurgerIngredientWithUUID} from "../../declarations/burger-ingredients";
 
-export const burgerConstructor = (state = initialState.burgerConstructor, action: AnyAction) => {
+export const burgerConstructor = (state: {items: Array<IBurgerIngredientWithUUID>, bun: string|null} = initialState.burgerConstructor, action: AnyAction) => {
     switch(action.type) {
         case ADD_INGREDIENT:
             if(action.payload.type === 'bun') {
@@ -26,16 +27,16 @@ export const burgerConstructor = (state = initialState.burgerConstructor, action
             if(action.payload.index !== undefined)
                 return {
                     ...state,
-                    items: state.items.filter((item: any, index: any) => index !== action.payload.index)
+                    items: state.items.filter((_, index) => index !== action.payload.index)
                 }
             return {
                 ...state,
-                items: state.items.filter((item: any) => item._id !== action.payload.id)
+                items: state.items.filter((item) => item._id !== action.payload.id)
             }
         case REORDER_INGREDIENTS:
             return {
                 ...state,
-                items: state.items.map((item, index) =>
+                items: state.items.map((_, index) =>
                     index === action.payload.first_index ? state.items[action.payload.second_index]
                         : index === action.payload.second_index ? state.items[action.payload.first_index]
                             : state.items[index]

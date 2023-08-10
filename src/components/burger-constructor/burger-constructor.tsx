@@ -13,22 +13,19 @@ import {selectOrderNumber} from "../../services/selectors/order";
 import {postOrder} from "../../services/actions/order";
 import {selectUser} from "../../services/selectors/user";
 import {useNavigate} from "react-router-dom";
+import {IBurgerIngredientWithUUID} from "../../declarations/burger-ingredients";
 
-interface IIngredient {
-    _id: string;
-    price: number;
-}
 
 const BurgerConstructor: FunctionComponent = () => {
     const [orderDetailsVisible, setOrderDetailsVisible] = React.useState(false);
     const dispatch = useDispatch();
-    const ingredients:Array<IIngredient> = useSelector(selectBurgerConstructorItems);
+    const ingredients:Array<IBurgerIngredientWithUUID> = useSelector(selectBurgerConstructorItems);
     const orderNumber = useSelector(selectOrderNumber);
     const bun = useSelector(selectBurgerConstructorBun);
     const user = useSelector(selectUser);
     const navigate = useNavigate();
 
-    const totalPrice: number = ingredients.reduce((partialSum: number, ingredient: IIngredient) => partialSum + ingredient.price, 0)
+    const totalPrice: number = ingredients.reduce((partialSum, ingredient) => partialSum + ingredient.price, 0)
         + (bun ? bun.price * 2 : 0);
 
     const submitOrder = () => {
@@ -72,7 +69,7 @@ const BurgerConstructor: FunctionComponent = () => {
                     <div className={`custom-scroll ${styles.scrollablePart}`}>
                         {!bun && <p className={`${styles.emptyConstructor}`}>Сначала выберите булку. Перетащите её сюда из списка ингредиентов.</p>}
                         {
-                            ingredients.map((item: any, index: any) =>
+                            ingredients.map((item, index) =>
                                 (
                                     <BurgerConstructorDraggableElement
                                         key={item.uuid}
