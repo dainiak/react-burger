@@ -1,4 +1,9 @@
-import {ADD_INGREDIENT, REMOVE_INGREDIENT, REORDER_INGREDIENTS} from "../actions/burger-constructor";
+import {
+    ADD_INGREDIENT,
+    REMOVE_INGREDIENT,
+    REORDER_INGREDIENTS,
+    RESET_BURGER_CONSTRUCTOR
+} from "../actions/burger-constructor";
 import {initialState} from "./initial-state";
 
 import { v4 as randomUUID } from 'uuid';
@@ -7,6 +12,8 @@ import {IBurgerIngredientWithUUID} from "../../declarations/burger-ingredients";
 
 export const burgerConstructor = (state: {items: Array<IBurgerIngredientWithUUID>, bun: string|null} = initialState.burgerConstructor, action: AnyAction) => {
     switch(action.type) {
+        case RESET_BURGER_CONSTRUCTOR:
+            return initialState.burgerConstructor;
         case ADD_INGREDIENT:
             if(action.payload.type === 'bun') {
                 return {
@@ -18,7 +25,7 @@ export const burgerConstructor = (state: {items: Array<IBurgerIngredientWithUUID
                 ...action.payload,
                 uuid: randomUUID()
             }
-            console.log(itemWithUuid);
+
             return {
                 ...state,
                 items: [...state.items, itemWithUuid]

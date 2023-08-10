@@ -1,4 +1,4 @@
-import { Navigate } from 'react-router-dom';
+import {Navigate, useLocation} from 'react-router-dom';
 import {selectUser} from "../../services/selectors/user";
 import {useSelector} from "react-redux";
 import React, {FunctionComponent, ReactElement} from "react";
@@ -6,6 +6,7 @@ import {LOGIN_SUCCESS} from "../../services/actions/user";
 import {getUserInfoByApi} from "../../utils/burger-api";
 import {useDispatch} from "react-redux";
 import {logoutUser} from "../../services/actions/user";
+import {ROUTE_ROOT} from "../../utils/routes";
 
 interface IAuthComponentProps {
     element: ReactElement;
@@ -38,7 +39,7 @@ export const AuthOnly:FunctionComponent<IAuthComponentProps> = ({ element, alter
         return <div>Загрузка данных о пользователе...</div>
     }
 
-    return (user.profile ? element : <Navigate to={alternative} replace/>);
+    return (user.profile ? element : <Navigate to={alternative} replace={true} state={{redirectedFrom: ROUTE_ROOT}}  />);
 }
 
 
@@ -46,8 +47,10 @@ export const NonAuthOnly:FunctionComponent<IAuthComponentProps> = ({ element, al
     const user = useSelector(selectUser);
     const dispatch = useDispatch();
     const [loading, setLoading] = React.useState(false);
+    const location = useLocation();
+    const redirectedFrom = location.state ? location.state.redirectedFrom : null;
 
-    if(!user.profile && localStorage.getItem('refreshToken')){
+    if(!loading && !user.profile && localStorage.getItem('refreshToken')){
         setLoading(true);
 
         getUserInfoByApi().then((data) => {
@@ -64,9 +67,10 @@ export const NonAuthOnly:FunctionComponent<IAuthComponentProps> = ({ element, al
             }
         });
     }
+
     if(loading){
         return <div>Загрузка данных о пользователе...</div>
     }
 
-    return (user.profile ? <Navigate to={alternative} replace/> : element);
+    return (user.profile ? <Navigate to={redirectedFrom ? redirectedFrom : alternative} replace/> : element);
 }

@@ -3,7 +3,7 @@ import {Button, EmailInput, Input} from "@ya.praktikum/react-developer-burger-ui
 import React, {FunctionComponent, FormEvent} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {selectUser} from "../services/selectors/user";
-import {Navigate} from "react-router-dom";
+import {Navigate, useLocation} from "react-router-dom";
 import {loginUser} from "../services/actions/user";
 import {loadUserProfile} from "../services/actions/user";
 import {useForm} from "../utils/useForm";
@@ -14,6 +14,8 @@ export const LoginPage:FunctionComponent = () => {
     const {values, handleChange} = useForm({email: '', password: ''});
     const userInfo = useSelector(selectUser);
     const dispatch = useDispatch();
+    const location = useLocation();
+    const redirectedFrom = location.state ? location.state.redirectedFrom : null;
 
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -24,8 +26,8 @@ export const LoginPage:FunctionComponent = () => {
         dispatch(loadUserProfile());
     }
 
-    if(userInfo.profile) {
-        return (<Navigate to="/" replace/>);
+    if(userInfo.profile && redirectedFrom) {
+        return (<Navigate to={redirectedFrom} replace/>);
     }
 
     return (

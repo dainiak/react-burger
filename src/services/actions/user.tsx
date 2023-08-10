@@ -71,10 +71,15 @@ export const logoutUser:Function = () => {
 export const loadUserProfile: Function = () => {
     return (dispatch: Function) => {
         getUserInfoByApi().then((data) => {
-            data.success && dispatch({
-                type: LOGIN_SUCCESS,
-                payload: {name: data.user.name, email: data.user.email}
-            })
+            if(data.success) {
+                dispatch({
+                    type: LOGIN_SUCCESS,
+                    payload: {name: data.user.name, email: data.user.email}
+                })
+            }
+            else{
+                dispatch(logoutUser());
+            }
         });
     }
 }

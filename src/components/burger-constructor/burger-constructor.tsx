@@ -4,7 +4,8 @@ import styles from './burger-constructor.module.css';
 import OrderDetails from "../order-details/order-details";
 import Modal from "../modal/modal";
 import {useDrop} from "react-dnd";
-import {ADD_INGREDIENT, REMOVE_INGREDIENT} from "../../services/actions/burger-constructor";
+import {ADD_INGREDIENT, REMOVE_INGREDIENT, RESET_BURGER_CONSTRUCTOR} from "../../services/actions/burger-constructor";
+import {RESET_ORDER} from "../../services/actions/order";
 import {useDispatch, useSelector} from "react-redux";
 import BurgerConstructorDraggableElement
     from "../burger-constructor-draggable-element/burger-constructor-druggable-element";
@@ -14,6 +15,7 @@ import {postOrder} from "../../services/actions/order";
 import {selectUser} from "../../services/selectors/user";
 import {useNavigate} from "react-router-dom";
 import {IBurgerIngredientWithUUID} from "../../declarations/burger-ingredients";
+import {ROUTE_LOGIN, ROUTE_ROOT} from "../../utils/routes";
 
 
 const BurgerConstructor: FunctionComponent = () => {
@@ -30,11 +32,16 @@ const BurgerConstructor: FunctionComponent = () => {
 
     const submitOrder = () => {
         if(!user.profile)
-            navigate('/login');
+            navigate(ROUTE_LOGIN, {replace: true, state: {redirectedFrom: ROUTE_ROOT}});
         else {
             setOrderDetailsVisible(true);
-            dispatch(postOrder([bun, ...ingredients.map(item => item._id), bun]));
+            dispatch(postOrder([bun?._id, ...ingredients.map(item => item._id), bun?._id]));
         }
+    }
+
+    const resetOrder = () => {
+        dispatch({type: RESET_ORDER});
+        dispatch({type: RESET_BURGER_CONSTRUCTOR})
     }
 
     const [{isHover}, dropTarget] = useDrop({
@@ -99,6 +106,11 @@ const BurgerConstructor: FunctionComponent = () => {
                     {orderNumber === null && bun &&
                         <Button htmlType="submit" type="primary" size="large" onClick={() => submitOrder()}>
                         Оформить заказ
+                        </Button>
+                    }
+                    {orderNumber &&
+                        <Button htmlType="submit" type="primary" size="large" onClick={() => resetOrder()}>
+                            Сделать новый заказ
                         </Button>
                     }
                 </div>

@@ -12,7 +12,7 @@ const requestApi = async (path: string, options?: RequestInit) => {
 
 const refreshTokens = async () => {
     return requestApi(
-        `/auth/token`, {
+        '/auth/token', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -34,8 +34,9 @@ interface IFetchOptions {
 const fetchWithRefresh = async (path: string, options:IFetchOptions) => {
     try {
         options.headers.authorization = getCookie("token");
-        return await fetch(`${NORMA_API_ENDPOINT}${path}`, options);
+        return await requestApi(path, options);
     } catch (err: any) {
+        console.log(err);
         if (err.message === "jwt expired") {
             const refreshData = await refreshTokens();
             if (!refreshData.success) {
@@ -149,8 +150,6 @@ export const getUserInfoByApi = async () => {
                 'Content-Type': 'application/json'
             }
         }
-    ).then(
-        checkApiResponse
     );
 }
 
