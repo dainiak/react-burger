@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {FunctionComponent} from 'react';
 import {Button, ConstructorElement, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-constructor.module.css';
 import OrderDetails from "../order-details/order-details";
 import Modal from "../modal/modal";
 import {useDrop} from "react-dnd";
-import {ADD_INGREDIENT, REMOVE_INGREDIENT} from "../../services/actions/burger-constructor";
+import {ADD_INGREDIENT, REMOVE_INGREDIENT, RESET_BURGER_CONSTRUCTOR} from "../../services/actions/burger-constructor";
+import {RESET_ORDER} from "../../services/actions/order";
 import {useDispatch, useSelector} from "react-redux";
 import BurgerConstructorDraggableElement
     from "../burger-constructor-draggable-element/burger-constructor-druggable-element";
@@ -13,28 +14,34 @@ import {selectOrderNumber} from "../../services/selectors/order";
 import {postOrder} from "../../services/actions/order";
 import {selectUser} from "../../services/selectors/user";
 import {useNavigate} from "react-router-dom";
+import {IBurgerIngredientWithUUID} from "../../declarations/burger-ingredients";
+import {ROUTE_LOGIN, ROUTE_ROOT} from "../../utils/routes";
 
-function BurgerConstructor() {
+
+const BurgerConstructor: FunctionComponent = () => {
     const [orderDetailsVisible, setOrderDetailsVisible] = React.useState(false);
     const dispatch = useDispatch();
-    const ingredients = useSelector(selectBurgerConstructorItems);
+    const ingredients:Array<IBurgerIngredientWithUUID> = useSelector(selectBurgerConstructorItems);
     const orderNumber = useSelector(selectOrderNumber);
     const bun = useSelector(selectBurgerConstructorBun);
     const user = useSelector(selectUser);
     const navigate = useNavigate();
 
-    // @ts-ignore
-    const totalPrice = ingredients.reduce((partialSum, ingredient) => partialSum + ingredient.price, 0)
+    const totalPrice: number = ingredients.reduce((partialSum, ingredient) => partialSum + ingredient.price, 0)
         + (bun ? bun.price * 2 : 0);
 
     const submitOrder = () => {
         if(!user.profile)
-            navigate('/login');
+            navigate(ROUTE_LOGIN, {replace: true, state: {redirectedFrom: ROUTE_ROOT}});
         else {
             setOrderDetailsVisible(true);
-            // @ts-ignore
-            dispatch(postOrder([bun, ...ingredients.map(item => item._id), bun]));
+            dispatch(postOrder([bun?._id, ...ingredients.map(item => item._id), bun?._id]));
         }
+    }
+
+    const resetOrder = () => {
+        dispatch({type: RESET_ORDER});
+        dispatch({type: RESET_BURGER_CONSTRUCTOR})
     }
 
     const [{isHover}, dropTarget] = useDrop({
@@ -69,7 +76,7 @@ function BurgerConstructor() {
                     <div className={`custom-scroll ${styles.scrollablePart}`}>
                         {!bun && <p className={`${styles.emptyConstructor}`}>Сначала выберите булку. Перетащите её сюда из списка ингредиентов.</p>}
                         {
-                            ingredients.map((item: any, index: any) =>
+                            ingredients.map((item, index) =>
                                 (
                                     <BurgerConstructorDraggableElement
                                         key={item.uuid}
@@ -99,6 +106,11 @@ function BurgerConstructor() {
                     {orderNumber === null && bun &&
                         <Button htmlType="submit" type="primary" size="large" onClick={() => submitOrder()}>
                         Оформить заказ
+                        </Button>
+                    }
+                    {orderNumber &&
+                        <Button htmlType="submit" type="primary" size="large" onClick={() => resetOrder()}>
+                            Сделать новый заказ
                         </Button>
                     }
                 </div>

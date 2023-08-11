@@ -1,10 +1,10 @@
-import React from 'react';
+import React, {FunctionComponent} from 'react';
 import {Logo, BurgerIcon, ListIcon, ProfileIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './app-header.module.css';
 import {NavLink} from "react-router-dom";
 import {ROUTE_ORDERS, ROUTE_PROFILE, ROUTE_ROOT} from "../../utils/routes";
 
-function AppHeader() {
+const AppHeader:FunctionComponent = () => {
   return (
     <header className={styles.header}>
         <div className={styles.logo}><Logo /></div>
@@ -31,6 +31,5 @@ function AppHeader() {
     </header>
   );
 }
-
 
 export default AppHeader;

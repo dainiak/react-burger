@@ -1,18 +1,23 @@
 import styles from "../burger-constructor/burger-constructor.module.css";
 import {ConstructorElement, DragIcon} from "@ya.praktikum/react-developer-burger-ui-components";
-import React from "react";
+import React, {FunctionComponent} from "react";
 import {useDrag, useDrop} from "react-dnd";
-import PropTypes from "prop-types";
 import {REORDER_INGREDIENTS} from "../../services/actions/burger-constructor";
 import {useDispatch} from "react-redux";
 
+type TBurgerConstructorDraggableElementProps = {
+    index: number;
+    text: string;
+    price: number;
+    thumbnail: string;
+    handleClose: () => void;
+};
 
-function BurgerConstructorDraggableElement(props: any) {
+const BurgerConstructorDraggableElement: FunctionComponent<TBurgerConstructorDraggableElementProps> = (props) =>      {
     const dispatch = useDispatch();
-    // @ts-ignore
+
     const [{isDrag}, dragRef] = useDrag({
         type: 'ingredientInConstructor',
-        // @ts-ignore
         item: {index: props.index},
         collect: monitor => ({
             isDrag: monitor.isDragging()
@@ -21,8 +26,7 @@ function BurgerConstructorDraggableElement(props: any) {
 
     const [{isHover}, dropTarget] = useDrop({
         accept: 'ingredientInConstructor',
-        drop(item) {
-            // @ts-ignore
+        drop(item: TBurgerConstructorDraggableElementProps) {
             dispatch({type: REORDER_INGREDIENTS, payload: {first_index: item.index, second_index: props.index}});
         },
         collect: monitor => ({
@@ -30,8 +34,6 @@ function BurgerConstructorDraggableElement(props: any) {
         })
     });
 
-
-    // @ts-ignore
     return (
         <div ref={dropTarget} style={{opacity: isHover ? 0.7 : 1}}>
             <div className={styles.constructorElementWrapper} style={{opacity: isDrag ? 0.3 : 1}} ref={dragRef}>
@@ -46,15 +48,6 @@ function BurgerConstructorDraggableElement(props: any) {
             </div>
         </div>
     )
-}
-
-
-BurgerConstructorDraggableElement.propTypes = {
-    index: PropTypes.number,
-    text: PropTypes.string,
-    price: PropTypes.number,
-    thumbnail: PropTypes.string,
-    handleClose: PropTypes.func.isRequired
 }
 
 export default BurgerConstructorDraggableElement;

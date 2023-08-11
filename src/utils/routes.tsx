@@ -6,5 +6,4 @@ export const ROUTE_FORGOT_PASSWORD = '/forgot-password';
 export const ROUTE_RESET_PASSWORD = '/reset-password';
 export const ROUTE_PROFILE = '/profile';
 export const ROUTE_INGREDIENTS = '/ingredients';
-
 export const ROUTE_ORDERS = '/profile/orders';

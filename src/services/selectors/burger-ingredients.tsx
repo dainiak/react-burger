@@ -1,4 +1,6 @@
-export const selectBurgerIngredientsItems = (store: any) => store.burgerIngredients.items;
-export const selectCurrentIngredient = (store: any) => store.currentIngredient;
+import {IStore} from "../../declarations/store";
 
-export const selectBurgerIngredients = (store: any) => store.burgerIngredients;
+export const selectBurgerIngredientsItems = (store: IStore) => store.burgerIngredients.items;
+export const selectCurrentIngredient = (store: IStore) => store.currentIngredient;
+
+export const selectBurgerIngredients = (store: IStore) => store.burgerIngredients;

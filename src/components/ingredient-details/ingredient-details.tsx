@@ -1,14 +1,12 @@
-import React from "react";
+import React, {FunctionComponent} from "react";
 import styles from './ingredient-details.module.css';
 
-import {ingredientPropTypes} from "../../utils/prop-types";
 import {useSelector} from "react-redux";
 import {selectBurgerIngredientsItems} from "../../services/selectors/burger-ingredients";
-import PropTypes from "prop-types";
 
-function IngredientDetails(props: any) {
+const IngredientDetails:FunctionComponent<{ingredientId: string|undefined}> = (props) => {
     const ingredients = useSelector(selectBurgerIngredientsItems);
-    const ingredient = ingredients.find((ingredient: any) => ingredient._id === props.ingredientId);
+    const ingredient = ingredients.find((ingredient) => ingredient._id === props.ingredientId);
     if(!ingredient) {
         return (<div className={styles.wrapper}><p>Ингредиент не найден</p></div>);
     }
@@ -16,7 +14,7 @@ function IngredientDetails(props: any) {
     const name = ingredient.name;
     const image = ingredient.image;
 
-    const nutritionFacts = [
+    const nutritionFacts: {name: string; value: number}[] = [
         {name: "Калории, ккал", value: ingredient.calories},
         {name: "Белки, г", value: ingredient.proteins},
         {name: "Жиры, г", value: ingredient.fat},
@@ -32,7 +30,7 @@ function IngredientDetails(props: any) {
                 <p className="text text_type_main-medium pt-4 pb-8">{name}</p>
                 <div className={styles.nutritionFacts}>
                     {
-                        nutritionFacts.map((fact: any) => (
+                        nutritionFacts.map((fact) => (
                             <div key={fact.name} className={`text text_type_main-small text_color_inactive ${styles.nutritionFactCard}`}>
                                 {fact.name}
                                 <div className="text text_type_digits-small text_color_inactive">{fact.value}</div>
@@ -43,10 +41,6 @@ function IngredientDetails(props: any) {
             </div>
         </React.Fragment>
     )
-}
-
-IngredientDetails.propTypes = {
-    ingredientId: PropTypes.string
 }
 
 export default IngredientDetails;

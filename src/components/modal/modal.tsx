@@ -1,22 +1,19 @@
-import React from "react";
+import React, {FunctionComponent, ReactNode} from "react";
 import styles from './modal.module.css';
 import {CloseIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import ModalOverlay from "../modal-overlay/modal-overlay";
-import PropTypes from 'prop-types';
 
-
-
-function Modal(props: any) {
-    function keyDownHandler(event: any) {
-        event.keyCode === 27 && props.onClose();
-    }
-
+const Modal: FunctionComponent<{onClose: ()=>void, children?:ReactNode}> = (props) => {
     React.useEffect(() => {
-        document.addEventListener("keydown", keyDownHandler);
-        return () => {
-            document.removeEventListener("keydown", keyDownHandler);
+        function keyDownHandler(event: KeyboardEvent) {
+            event.key === 'Escape' && props.onClose();
         }
-    }, [props.onClose])
+
+        document.addEventListener('keydown', keyDownHandler);
+        return () => {
+            document.removeEventListener('keydown', keyDownHandler);
+        }
+    }, [props])
 
 
     return (
@@ -28,11 +25,6 @@ function Modal(props: any) {
             </div>
         </React.Fragment>
     )
-}
-
-Modal.propTypes = {
-    onClose: PropTypes.func,
-    children: PropTypes.node.isRequired
 }
 
 export default Modal;

@@ -1,8 +1,9 @@
 import {LOAD_INGREDIENTS, LOAD_INGREDIENTS_FAILED, LOAD_INGREDIENTS_SUCCESS} from "../actions/burger-ingredients";
 import {initialState} from "./initial-state";
+import {AnyAction} from "redux";
 
 
-export const burgerIngredientsReducer = (state = initialState.burgerIngredients, action: any) => {
+export const burgerIngredientsReducer = (state = initialState.burgerIngredients, action: AnyAction) => {
     switch(action.type) {
         case LOAD_INGREDIENTS:
             return {

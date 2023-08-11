@@ -6,14 +6,14 @@ import { burgerConstructor } from "./burger-constructor";
 import { userReducer} from "./user";
 
 
-import { orderReducer } from "./orderReducer";
+import { order } from "./order";
 
 
 
 const rootReducer = combineReducers({
     burgerIngredients: burgerIngredientsReducer,
     burgerConstructor: burgerConstructor,
-    order: orderReducer,
+    order: order,
     user: userReducer
 });
 

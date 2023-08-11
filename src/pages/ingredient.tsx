@@ -3,19 +3,12 @@ import IngredientDetails from "../components/ingredient-details/ingredient-detai
 import styles from './ingredient.module.css';
 
 import {useParams} from "react-router-dom";
-import React from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {loadIngredients} from "../services/actions/burger-ingredients";
+import React, {FunctionComponent} from "react";
+import {useSelector} from "react-redux";
 import {selectBurgerIngredients} from "../services/selectors/burger-ingredients";
 
 
-export const IngredientPage = () => {
-    const dispatch = useDispatch();
-
-    // @ts-ignore
-    React.useEffect(() => dispatch(loadIngredients()), [dispatch]);
-
-    // @ts-ignore
+export const IngredientPage:FunctionComponent = () => {
     const { isLoading, hasError } = useSelector(selectBurgerIngredients);
     const { id } = useParams<{ id: string }>();
 

@@ -1,24 +1,26 @@
-/* The following functions are taken from the LMS as-is */
-
-export function getCookie(name) {
+export function getCookie(name: string):string | undefined {
     const matches = document.cookie.match(
-        new RegExp('(?:^|; )' + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)')
+        new RegExp('(?:^|; )' + name.replace(/([/+^.$?*|{}()[\]\\])/g, '\\$1') + '=([^;]*)')
     );
     return matches ? decodeURIComponent(matches[1]) : undefined;
 }
 
-export function setCookie(name, value, props) {
+interface ICookieProps {
+    expires?: Date | number | string;
+    [key: string]: any;
+}
+export function setCookie(name:string, value:string|null, props?:ICookieProps) {
     props = props || {};
     let exp = props.expires;
-    if (typeof exp == 'number' && exp) {
+    if (typeof exp === 'number' && exp) {
         const d = new Date();
         d.setTime(d.getTime() + exp * 1000);
         exp = props.expires = d;
     }
-    if (exp && exp.toUTCString) {
+    if (exp && typeof exp == 'object') {
         props.expires = exp.toUTCString();
     }
-    value = encodeURIComponent(value);
+    value = encodeURIComponent(value || '');
     let updatedCookie = name + '=' + value;
     for (const propName in props) {
         updatedCookie += '; ' + propName;
@@ -30,6 +32,6 @@ export function setCookie(name, value, props) {
     document.cookie = updatedCookie;
 }
 
-export function deleteCookie(name) {
+export function deleteCookie(name: string) {
     setCookie(name, null, { expires: -1 });
 }

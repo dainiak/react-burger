@@ -2,9 +2,10 @@ import React from "react";
 import styles from './order-details.module.css';
 import doneImage from './img/done.png';
 import {useSelector} from "react-redux";
+import {selectOrder} from "../../services/selectors/order";
 
-function OrderDetails(props: any) {
-    const {number, name, isPosting, hasError} = useSelector((store: any) => store.order);
+function OrderDetails() {
+    const {number, name, isPosting, hasError} = useSelector(selectOrder);
 
     return (
         <div className={styles.wrapper}>

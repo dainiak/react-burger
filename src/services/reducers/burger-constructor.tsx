@@ -1,10 +1,19 @@
-import {ADD_INGREDIENT, REMOVE_INGREDIENT, REORDER_INGREDIENTS} from "../actions/burger-constructor";
+import {
+    ADD_INGREDIENT,
+    REMOVE_INGREDIENT,
+    REORDER_INGREDIENTS,
+    RESET_BURGER_CONSTRUCTOR
+} from "../actions/burger-constructor";
 import {initialState} from "./initial-state";
-// @ts-ignore
-import { v4 as randomUUID } from 'uuid';
 
-export const burgerConstructor = (state = initialState.burgerConstructor, action: any) => {
+import { v4 as randomUUID } from 'uuid';
+import {AnyAction} from "redux";
+import {IBurgerIngredientWithUUID} from "../../declarations/burger-ingredients";
+
+export const burgerConstructor = (state: {items: Array<IBurgerIngredientWithUUID>, bun: string|null} = initialState.burgerConstructor, action: AnyAction) => {
     switch(action.type) {
+        case RESET_BURGER_CONSTRUCTOR:
+            return initialState.burgerConstructor;
         case ADD_INGREDIENT:
             if(action.payload.type === 'bun') {
                 return {
@@ -16,7 +25,7 @@ export const burgerConstructor = (state = initialState.burgerConstructor, action
                 ...action.payload,
                 uuid: randomUUID()
             }
-            console.log(itemWithUuid);
+
             return {
                 ...state,
                 items: [...state.items, itemWithUuid]
@@ -25,16 +34,16 @@ export const burgerConstructor = (state = initialState.burgerConstructor, action
             if(action.payload.index !== undefined)
                 return {
                     ...state,
-                    items: state.items.filter((item: any, index: any) => index !== action.payload.index)
+                    items: state.items.filter((_, index) => index !== action.payload.index)
                 }
             return {
                 ...state,
-                items: state.items.filter((item: any) => item._id !== action.payload.id)
+                items: state.items.filter((item) => item._id !== action.payload.id)
             }
         case REORDER_INGREDIENTS:
             return {
                 ...state,
-                items: state.items.map((item, index) =>
+                items: state.items.map((_, index) =>
                     index === action.payload.first_index ? state.items[action.payload.second_index]
                         : index === action.payload.second_index ? state.items[action.payload.first_index]
                             : state.items[index]

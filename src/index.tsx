@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
+import App from './components/app/app';
 import reportWebVitals from './reportWebVitals';
 import {configureStore} from "@reduxjs/toolkit";
 import {rootReducer} from "./services/reducers";
@@ -13,7 +13,6 @@ const root = ReactDOM.createRoot(
 );
 
 
-// @ts-ignore
 const store = configureStore({
     reducer: rootReducer,
     devTools: true

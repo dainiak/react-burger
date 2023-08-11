@@ -1,17 +1,17 @@
 import styles from "./forgot-password.module.css";
 import {Button, EmailInput} from "@ya.praktikum/react-developer-burger-ui-components";
-import React from "react";
+import React, {FunctionComponent, FormEvent} from "react";
 import {sendPasswordResetEmailByApi} from "../utils/burger-api";
 import {useNavigate} from "react-router-dom";
 import {useForm} from "../utils/useForm";
 import {ROUTE_LOGIN} from "../utils/routes";
 
 
-export const ForgotPasswordPage = () => {
+export const ForgotPasswordPage:FunctionComponent = () => {
     const {values, handleChange} = useForm({email: ''});
     const navigate = useNavigate();
 
-    const onSubmit = (e: any) => {
+    const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         sendPasswordResetEmailByApi(values.email).then(() => {
             navigate('/reset-password', {replace: true});
